@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vending Machine Inventory</title>
+</head>
+
+<body>
+    <h1 style="text-align: center;">Vending Machine Inventory Page</h1>
+    <hr>
+    
+    <h4>Name: {{ name }}</h4> 
+    <h4>Class: {{ class }}</h4>
+    <hr>
+
+    <!-- if there's a product available -->
+    {% if products %} 
+        {% for product in products %}
+            <h3>Product {{ forloop.counter }} - {{ product.name }}</h3>
+            <ul>
+                <li>Name: {{ product.name }}</li>
+                <li>Amount: {{ product.amount }}</li>
+                <li>Price: Rp.{{ product.price }},-</li>
+                <li>Date added: {{ product.date_added }}</li>
+                <li>Description: {{ product.description }}</li>
+            </ul>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>
