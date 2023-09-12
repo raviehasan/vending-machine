@@ -47,6 +47,7 @@
     - `amount` sebagai jumlah *item* dengan tipe `IntegerField`.
     - `description` sebagai deskripsi *item* dengan tipe `TextField`.
     <br>
+    
     - Membuka `models.py` dan mengisinya dengan attributes/fields yang diperlukan. Pada kasus ini, saya menggunakan 5 attributes, yakni `name` (CharField), `amount` (IntegerField), `description` (TextField), `price` (IntegerField), dan `date_added` (DateField). Isi file `models.py` adalah sebagai berikut:
     ```bash
     from django.db import models
@@ -64,7 +65,7 @@
     ```
     Note:
     - `__str__` diperlukan untuk keperluan unit tests
-    - <hr>
+    <hr>
 
 - [ ] Membuat sebuah fungsi pada `views.py` untuk dikembalikan ke dalam sebuah *template* HTML yang menampilkan nama aplikasi serta nama dan kelas kamu. <br>
     - Membuka `views.py` dan menambahkan potongan kode di bawah ini untuk menghubungkan Views dan Templates (e.g.: substitute `{{ <desired_variable> }}` pada file-file di directory `templates`). Saya memerlukan variables `name`, `class`, `student_id`, dan `products` (berisi detail setiap product yang ada). Sehingga, isi `views.py` sebagai berikut:
