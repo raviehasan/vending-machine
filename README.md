@@ -60,11 +60,11 @@
 
         def __str__(self):
             return f"Name: {self.name} {self.amount} {self.price} {self.date_added} {self.description}"
-
+    .
     ```
     Note:
     - `__str__` diperlukan untuk keperluan unit tests
-    <hr>
+    - <hr>
 
 - [ ] Membuat sebuah fungsi pada `views.py` untuk dikembalikan ke dalam sebuah *template* HTML yang menampilkan nama aplikasi serta nama dan kelas kamu. <br>
     - Membuka `views.py` dan menambahkan potongan kode di bawah ini untuk menghubungkan Views dan Templates (e.g.: substitute `{{ <desired_variable> }}` pada file-file di directory `templates`). Saya memerlukan variables `name`, `class`, `student_id`, dan `products` (berisi detail setiap product yang ada). Sehingga, isi `views.py` sebagai berikut:
