@@ -60,6 +60,7 @@
 
         def __str__(self):
             return f"Name: {self.name} {self.amount} {self.price} {self.date_added} {self.description}"
+
     ```
     Note: `__str__` diperlukan untuk keperluan unit tests
     <hr>
@@ -160,7 +161,8 @@ Notes:
 <br>
 
 ## 2. Buatlah bagan yang berisi request client ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara urls.py, views.py, models.py, dan berkas html
-![alt-text](client-django-flow.jpg)
+![alt-text](client-django-flow.png)
+- Client mengirim request ke Internet -> forward ke Python/Django -> forward ke urls.py -> forward ke views.py untuk memproses url -> read/write data dari/ke models.py dan database -> input/display data dari/ke templates -> return html file yang telah dimerge dengan value-value yang diinginkan -> proses ke internet -> display ke client's device
 <hr>
 <br>
 
