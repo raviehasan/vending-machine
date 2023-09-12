@@ -1,6 +1,5 @@
 from django.test import TestCase, Client
 from .models import Product
-from django.db import models
 from django.utils import timezone
 
 class MainTest(TestCase):
@@ -26,6 +25,6 @@ class TestModels(TestCase):
         Product.objects.create(name="Chitato", amount=100, price=10000, date_added=timezone.now, description="Chips")
 
     def test_string_method(self):
-        product = Product.objects.get()
+        product = Product.objects.get(id=1)
         expected_string = f"Name: {product.name} {product.amount} {product.price} {product.date_added} {product.description}"
         self.assertEqual(str(product), expected_string)
