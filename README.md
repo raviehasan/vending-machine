@@ -343,7 +343,7 @@ Notes:
     - Memiliki kelebihan dalam proses binding data
     <hr>
     
-##References
+## References
 - [Slide 2 SCeLE "Introduction to Internet and Web Framework"](https://scele.cs.ui.ac.id/pluginfile.php/193239/mod_resource/content/1/02%20-%20Introduction%20to%20the%20Internet%20and%20Web%20Framework.pdf)
 - [Slide 3 SCeLE "MTV Django Architecture"](https://scele.cs.ui.ac.id/pluginfile.php/193781/mod_resource/content/1/03%20-%20MTV%20Django%20Architecture.pdf)
 - [Tutorial 0 dan Tutorial 1](https://pbp-fasilkom-ui.github.io/ganjil-2024/docs)
