@@ -47,6 +47,7 @@
     - `amount` sebagai jumlah *item* dengan tipe `IntegerField`.
     - `description` sebagai deskripsi *item* dengan tipe `TextField`.
     <br>
+    
     - Membuka `models.py` dan mengisinya dengan attributes/fields yang diperlukan. Pada kasus ini, saya menggunakan 5 attributes, yakni `name` (CharField), `amount` (IntegerField), `description` (TextField), `price` (IntegerField), dan `date_added` (DateField). Isi file `models.py` adalah sebagai berikut:
     ```bash
     from django.db import models
@@ -60,9 +61,10 @@
 
         def __str__(self):
             return f"Name: {self.name} {self.amount} {self.price} {self.date_added} {self.description}"
-
+    .
     ```
-    Note: `__str__` diperlukan untuk keperluan unit tests
+    Note:
+    - `__str__` diperlukan untuk keperluan unit tests
     <hr>
 
 - [ ] Membuat sebuah fungsi pada `views.py` untuk dikembalikan ke dalam sebuah *template* HTML yang menampilkan nama aplikasi serta nama dan kelas kamu. <br>
@@ -158,19 +160,16 @@ Notes:
 - `setUpTestData` digunakan untuk membuat objek baru dengan attributes yang diinginkan dijadikan argumen 
 - `test_string_method` digunakan untuk test apakah objek yang telah dibuat memiliki atribut yang sesuai
 <hr>
-<br>
 
 ## 2. Buatlah bagan yang berisi request client ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara urls.py, views.py, models.py, dan berkas html
 ![alt-text](client-django-flow.png)
 - Client mengirim request ke Internet -> forward ke Python/Django -> forward ke urls.py -> forward ke views.py untuk memproses url -> read/write data dari/ke models.py dan database -> input/display data dari/ke templates -> return html file yang telah dimerge dengan value-value yang diinginkan -> proses ke internet -> display ke client's device
 <hr>
-<br>
 
 ## 3. Jelaskan mengapa kita menggunakan virtual environment? Apakah kita tetap dapat membuat aplikasi web berbasis Django tanpa menggunakan virtual environment?
 - Virtual environment dapat mengisolasi dependencies untuk masing-masing django project. Tujuannya adalah karena dapat mempermudah ketika kita berkolaborasi dengan orang lain karena orang tersebut dapat include dependencies (python version, django version, etc.) yang digunakan pada django project kita. Dengan alasan yang sama, virtual environment juga memungkinkan kita untuk dapat mengerjakan project yang sama melalui berbagai device berbeda dengan cara include dependencies dari project tersebut.
 - Walaupun demikian, kita tetap dapat membuat aplikasi web berbasis Django tanpa menggunakan virtual environment. Hanya saja ada banyak risiko muncul error, dimulai dari bibsa terjadi konflik antar project karena dependencies antar project (misal perbedaan versi python dan django, etc.), akan lebih sulit untuk melakukan development project, hingga risiko gagal melakukan deploy juga cukup tinggi karena hal-hal tersebut.
 <hr>
-<br>
 
 ## 4. Jelaskan apakah itu MVC, MVT, MVVM dan perbedaan dari ketiganya.
 - <b>MVC (Model-View-Controller)</b>
