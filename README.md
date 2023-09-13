@@ -15,14 +15,14 @@
     - Menjalankan `python -m venv env` untuk membuat virtual environment untuk directory agar dapat maintain versi-versi django dan lain sebagainya yang dipakai di device
     - Menjalankan `env\Scripts\activate.bat` untuk mengaktifkan virtual environment
     - Membuat file baru bernama `requirements.txt` dan mengisinya dengan hal-hal yang ingin diinstall agar tidak terlalu banyak menjalankan command `pip install ...`, saya megnisinya dengan:
-      ```bash
-      django
-      gunicorn
-      whitenoise
-      psycopg2-binary
-      requests
-      urllib3
-      ```
+    ```bash
+    django
+    gunicorn
+    whitenoise
+    psycopg2-binary
+    requests
+    urllib3
+    ```
     - Menjalankan `pip install -r requirements.txt` untuk install hal-hal yang telah ditambahkan pada `requirements.txt` tadi
     - Menjalankan `django-admin startproject vending_machine .`
     - Membuka file `settings.py` dan ubah `ALLOWED_HOSTS = []` menjadi `ALLOWED_HOSTS = ["*"]` karena akan diperlukan untuk proses deployment 
@@ -327,7 +327,7 @@ Notes:
     - Controller: mengatur bagaimana data akan ditampilkan di View (kurang lebih seperti View pada MVT)
     - Input diterima oleh Controller
     - Kurang cocok untuk aplikasi berskala kecil
-- <b>MVT (Model-View-Template)</b>
+- <b>MVT/MTV (Model-View-Template)</b>
     - Model: untuk mencari dan mengolah data yang diminta oleh database
     - View: mengatur bagaimana data akan ditampilkan di Template (kurang lebih seperti Controller pada MVC)
     - Template: menampilkan data dengan design yang dibuat di sini (kurang lebih seperti View pada MVC dan MVVM)
@@ -341,3 +341,12 @@ Notes:
     - Input diterima oleh View
     - Kurang cocok untuk palikasi berskala kecil
     - Memiliki kelebihan dalam proses binding data
+    <hr>
+    
+##References
+- [Slide 2 SCeLE "Introduction to Internet and Web Framework"](https://scele.cs.ui.ac.id/pluginfile.php/193239/mod_resource/content/1/02%20-%20Introduction%20to%20the%20Internet%20and%20Web%20Framework.pdf)
+- [Slide 3 SCeLE "MTV Django Architecture"](https://scele.cs.ui.ac.id/pluginfile.php/193781/mod_resource/content/1/03%20-%20MTV%20Django%20Architecture.pdf)
+- [Tutorial 0 dan Tutorial 1](https://pbp-fasilkom-ui.github.io/ganjil-2024/docs)
+- [Getting Started with Django Unit Testing](https://www.section.io/engineering-education/django-unit-testing/)
+- [Definition Model-View-ViewModel (MVVM)](https://www.techtarget.com/whatis/definition/Model-View-ViewModel)
+- [MVC Framework - Introduction](https://www.tutorialspoint.com/mvc_framework/mvc_framework_introduction.htm)
