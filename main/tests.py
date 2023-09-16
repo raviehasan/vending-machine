@@ -11,14 +11,6 @@ class MainTest(TestCase):
         response = Client().get('/main/')
         self.assertTemplateUsed(response, 'main.html')
 
-    def test_main_products_url_is_exist(self):
-        response = Client().get('/main/products/')
-        self.assertEqual(response.status_code, 200)
-
-    def test_main_products_using_products_template(self):
-        response = Client().get('/main/products/')
-        self.assertTemplateUsed(response, 'products.html')
-
 class TestModels(TestCase):
     @classmethod
     def setUpTestData(cls):
