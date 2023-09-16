@@ -8,13 +8,13 @@
 ### Cara Pengerjaan Checklist
 - [ ] Membuat sebuah proyek Django baru. <br>
     - Membuat directory baru bernama `vending_machine` yang akan dijadikan local directory/repository dari github repository
-    - Membuka CMD pada directory `vending_machine` dan menjalankan `git init`,  `git config user.name ...`, dan `git config user.email ...` untuk konfigurasi github
+    - Membuka CMD pada directory `vending_machine` dan menjalankan `git init`,  `git config user.name <user_name>`, dan `git config user.email <user_email` untuk konfigurasi github
     - Membuat reporitory github baru bernama `vending-machine`
     - Membuat file `README.md` dan mengeditnya melalui VSCODE
-    - Menjalankan `git branch -M main`, `git remote add origin ...`, dan `git push -u origin main` untuk membuat main branch dengan nama `main`, menghubungkan local directory/repository dengan repository github, dan push/update semua perubahan ke github
+    - Menjalankan `git branch -M main`, `git remote add origin https://github.com/raviehasan/vending-machine.git`, dan `git push -u origin main` untuk membuat main branch dengan nama `main`, menghubungkan local directory/repository dengan repository github, dan push/update semua perubahan ke github
     - Menjalankan `python -m venv env` untuk membuat virtual environment untuk directory agar dapat maintain versi-versi django dan lain sebagainya yang dipakai di device
     - Menjalankan `env\Scripts\activate.bat` untuk mengaktifkan virtual environment
-    - Membuat file baru bernama `requirements.txt` dan mengisinya dengan hal-hal yang ingin diinstall agar tidak terlalu banyak menjalankan command `pip install ...`, saya megnisinya dengan:
+    - Membuat file baru bernama `requirements.txt` dan mengisinya dengan hal-hal yang ingin diinstall agar tidak terlalu banyak menjalankan command `pip install ...`, saya mengisinya dengan:
     ```bash
     django
     gunicorn
