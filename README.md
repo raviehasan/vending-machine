@@ -229,17 +229,9 @@
 
         return render(request, "main.html", context)
 
-    def show_products(request):
-        products = Product.objects.all().values()
-        context = {
-            'products' : products,
-        }
-
-        return render(request, "products.html", context)
     ```
-    Notes: 
+    Note:
     - show_main digunakan untuk  `https://vending-machine.adaptable.app/main/`
-    - show_products digunakan untuk `https://vending-machine.adaptable.app/main/products/` 
     <hr>
 
 - [ ] Membuat sebuah *routing* pada `urls.py` aplikasi `main` untuk memetakan fungsi yang telah dibuat pada `views.py`. <br>
@@ -247,7 +239,6 @@
     ```bash
     urlpatterns = [
         path('', show_main, name='show_main'), 
-        path('products/', show_products, name='show_product')
     ]
     ```
     Notes:
@@ -280,14 +271,6 @@ class MainTest(TestCase):
         response = Client().get('/main/')
         self.assertTemplateUsed(response, 'main.html')
 
-    def test_main_products_url_is_exist(self):
-        response = Client().get('/main/products/')
-        self.assertEqual(response.status_code, 200)
-
-    def test_main_products_using_products_template(self):
-        response = Client().get('/main/products/')
-        self.assertTemplateUsed(response, 'products.html')
-
 class TestModels(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -304,8 +287,6 @@ class TestModels(TestCase):
 Notes:
 - `test_main_url_is_exist` digunakan untuk test apakah terdapat url `https://vending-machine.adaptable.app/main/`
 - `test_main_using_main_template` digunakan untuk test apakah `https://vending-machine.adaptable.app/main/` menggunakan `main.html` sebagai template
-- `test_main_products_url_is_exist` digunakan untuk test apakah terdapat url `https://vending-machine.adaptable.app/main/products/`
-- `test_main_products_using_products_template` digunakan untuk test apakah `https://vending-machine.adaptable.app/main/` menggunakan `main.html` sebagai template
 - `setUpTestData` digunakan untuk membuat objek baru dengan attributes yang diinginkan dijadikan argumen 
 - `test_string_method` digunakan untuk test apakah objek yang telah dibuat memiliki atribut yang sesuai
 <hr>
