@@ -1,22 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vending Machine Inventory</title>
-</head>
+{% block style %}
+    <style>
+        h1 {
+            text-align: center;
+        }
 
-<body>
-    <h1 style="text-align: center;">Vending Machine Inventory Page</h1>
+        table {
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 5px;
+        }
+    </style>
+{% endblock style %}
+
+{% block content %}
+    <h1>Vending Machine Inventory Page</h1>
     <hr>
+
+    <h4>Name: {{name}}</h4> 
+    <h4>Class: {{class}}</h4>
+    <h4>Student ID: {{student_id}}</h4>
+    <hr>
+
+    <h3>Kamu menyimpan {{total_products}} product pada aplikasi ini</h3>
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Amount</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Date Added</th>
+        </tr>
     
-    <h4>Name: {{ name }}</h4> 
-    <h4>Class: {{ class }}</h4>
-    <h4>Student ID: {{ student_id }}</h4>
-    <hr>
-
-    <p>Note: <br>
-        - add "products/" to the current url if you'd like to see all available products and its details on this vending machine</p>
-</body>
-</html>
+        {% comment %} Berikut cara memperlihatkan data produk di bawah baris ini {% endcomment %}
+    
+        {% for product in products %}
+            <tr>
+                <td>{{product.name}}</td>
+                <td>{{product.amount}}</td>
+                <td>{{product.description}}</td>
+                <td>{{product.price}}</td>
+                <td>{{product.date_added}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    
+    <br />
+    
+    <a href="{% url 'main:create_product' %}">
+        <button>
+            Add New Product
+        </button>
+    </a>
+        
+{% endblock content %}
