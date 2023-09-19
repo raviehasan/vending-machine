@@ -1,9 +1,12 @@
 # Vending Machine Inventory
-#### https://vending-machine.adaptable.app/main/
 #### by Ravie Hasan Abud - 2206031864 - PBP A
+#### Tugas 2: https://vending-machine.adaptable.app/main/
+#### Tugas 3: http://ravie-hasan-tutorial.pbp.cs.ui.ac.id/
 <hr>
 
-## 1. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+# Tugas 2
+
+## 1. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
 
 ### Cara Pengerjaan Checklist
 - [ ] Membuat sebuah proyek Django baru. <br>
@@ -292,7 +295,7 @@ Notes:
 <hr>
 
 ## 2. Buatlah bagan yang berisi request client ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara urls.py, views.py, models.py, dan berkas html
-![alt-text](client-django-flow.png)
+![alt-text](images/client-django-flow.png)
 - Client mengirim request ke Internet -> forward ke Python/Django -> forward ke urls.py -> forward ke views.py untuk memproses url -> read/write data dari/ke models.py dan database -> input/display data dari/ke templates -> return html file yang telah dimerge dengan value-value yang diinginkan -> proses ke internet -> display ke client's device
 <hr>
 
@@ -331,3 +334,231 @@ Notes:
 - [Getting Started with Django Unit Testing](https://www.section.io/engineering-education/django-unit-testing/)
 - [Definition Model-View-ViewModel (MVVM)](https://www.techtarget.com/whatis/definition/Model-View-ViewModel)
 - [MVC Framework - Introduction](https://www.tutorialspoint.com/mvc_framework/mvc_framework_introduction.htm)
+<hr>
+<br>
+
+# Tugas 3
+
+## 1. Apa perbedaan antara form `POST` dan form `GET` dalam Django?
+- <b>POST</b>
+    - Digunakan untuk mengirimkan data ke server (membuat, mengganti, menghapus, etc.), return HTTP status code 201 jika berhasil
+    - Values tidak visible pada URL (data dikirimkan saat HTML request)
+    - Tidak memiliki limitasi panjang karakter
+    - Dapat menggunakan berbagai tipe data (contoh: string, integer)
+    - Lebih secured karena data tidak terekspos pada URL
+    - Dapat digunakan untuk mengirimkan data penting (contoh: password)
+    - Parameter tidak disimpan pada history browser
+    - Non-idempotent
+- <b>GET</b>
+    - Digunakan untuk membaca/mengakses data dari web server, retrun HTTP status code 200 jika berhasil
+    - Values visible pada URL --> user dapat input nilai variabel baru dengan lebih mudah
+    - Panjang karakter terbatas (umumnya maksimal 255 karakter)
+    - Hanya dapat menggunakan tipe data string
+    - Kurang aman karena data terekspos pada URL
+    - Dapat digunakan untuk mengirimkan data yang tidak terlalu penting
+    - Parameter disimpan pada history browser
+    - Idempotent (request selanjutnya akan diabaikan hingga request yang sedang dijalankan selesai mengirimkan respon)
+<hr>
+
+## 2. Apa perbedaan utama antara XML, JSON, dan HTML dalam konteks pengiriman data?
+- <b>HTML</b>
+    - Menurut saya kurang human-readable apabila merepresentasikan data menggunakan HTML (apabila dilihat melalui Postman)
+    - Secara umum digunakan untuk membuat struktur, layout, dan konten dari web page yang akan ditampilkan. Untuk data yang bersifat dinamis dapat memanfaatkan tools semacam XML, JSON, etc.
+- <b>XML</b>
+    - Menurut saya human-readable karena strukturnya jelas untuk dibaca, namun proses delivery datanya memerlukan waktu lebih lama jika dibandingkan dengan JSON.
+    - Secara umum digunakan untuk menyimpan dan melakukan transfer/pertukaran data melalui internet, banyak digunakan pada web dan mobile app
+    - XML lebih secure jika dibandingkan dengan JSON (JSON lebih vulnerable)
+    - Waktu eksekusi tidak secepat JSON
+    - Struktur data dapat terlihat dengan sangat jelas karena tag nya dapat dicustom (berbeda dengan HTML). Namun, waktu eksekusi program menjadi sedikit lebih lama karena banyak tag
+- <b>JSON</b>
+    - Menurut saya human-readable karena JSON menggunakan list dan dictionary python. Proses delivery dengan JSON jauh lebih cepat jika dibandingkan dengan menggunakan XML.
+    - Secara umum digunakan untuk menyimpan dan melakukan transfer/pertukaran data antara server dan aplikasi web, banyak digunakan juga pada web dan mobile app
+    - JSON lebih compatible terhadap teknologi-teknologi web dan lebih mudah untuk dimaintain oleh web developers jika dibandingkan dengan XML
+    - Waktu eksekusi lebih cepat dibandingkan XML
+    - Tidak menggunakan tag, sehingga lebih ringkas dan bisa merepresentasikan dengan ukuran file yang kecil
+<hr>
+
+## 3. Mengapa JSON sering digunakan dalam pertukaran data antara aplikasi web modern?
+- Tingkat simplicity dan readability yang tinggi karena karena syntax dan indentasinya yang ringkas
+- Memiliki banyak method yang dapat mempercepat proses penyusunan program (contoh: JSON.parse() untuk mengubah JSON string menjadi Object dengan atribut-atributnya)
+- Dapat merepresentasikan data dengan ukuran file yang kecil karena syntaxnya ringkas (seperti tidak menggunakan tag, etc.)
+- JDapat melakukan transfer/pertukaran data dengan sangat cepat (tidak perlu banyak parse karena syntaxnya juga singkat)
+- Sangat compatible dengan berbagai teknologi web, seperti JavaScript dan lain-lain.
+- Mendukung tipe data native, seperti numbers, booleans, null, etc.
+<hr>
+
+## 4. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+- [ ] Membuat input `form` untuk menambahkan objek model pada app sebelumnya.
+    1. Membuat `base.html` pada root/templates dan mengisinya dengan:
+    ```html
+    {% load static %}
+    <!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8" />
+            <meta
+                name="viewport"
+                content="width=device-width, initial-scale=1.0"
+            />
+            {% block meta %}
+            {% endblock meta %}
+        </head>
+
+        <body>
+            {% block content %}
+            {% endblock content %}
+        </body>
+    </html>
+    ```
+    Note: 
+    - `{% something %}` dapat diisi dari file lain (seperti semacam placeholder)
+    2. Membuat `forms.py` pada `vending_machine/main` dan mengisinya dengan:
+    ```python
+    from django.forms import ModelForm
+    from main.models import Product
+
+    class ProductForm(ModelForm):
+        class Meta:
+            model = Product
+            fields = ["name", "price", "amount", "description"]
+    ```
+    Notes: 
+    - `model = Product` menandakan bahwa isian form akan disimpan sebagai object Product
+    - `fields` menandakan bahwa object Product memiliki 4 atribut yang dapat diisi melalui form (name, price, amount, description)
+    3. Ubah function `show_main` pada `vending_machine/vending_machine/main/views.py` menjadi sebagai berikut:
+    ```python
+    def show_main(request):
+        products = Product.objects.all()
+        context = {
+            'name': 'Ravie Hasan Abud',
+            'class': 'PBP A',
+            'student_id': '2206031864',
+            'products': products,
+            'total_products': products.__len__(),
+        }
+
+        return render(request, "main.html", context)
+    ```
+    Notes:
+    - `'products` akan menyimpan seluruh product yang ada pada project saat ini
+    - `total_products` akan menyimpan banyak product yang ada pada project saat ini
+    4. Buat `create_product.html` pada `vending_machine/mcending_machine/main/templates/` dan isi sebagai berikut:
+    ```html
+    {% extends 'base.html' %} 
+
+    {% block content %}
+    <h1>Add New Product</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+            <tr>
+                <td></td>
+                <td>
+                    <input type="submit" value="Add Product"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    {% endblock %}
+    ```
+    Notes: 
+    - `{% block content %} ... {% endblock %}` adalah konten yang akan mengisi placeholder block content pada `base.html`
+    - `<form method="POST>` karena user akan memberikan beberapa input
+
+<hr>
+
+- [ ] Tambahkan 5 fungsi `views` untuk melihat objek yang sudah ditambahkan dalam format HTML, XML, JSON, XML *by ID*, dan JSON *by ID*.
+    1. `create_product` untuk menerima input user, dapat diakses ketika user klik button "Add New Product" atau ketika user mengakses `(url)/create-product`
+    ```python
+    def create_product(request):
+        form = ProductForm(request.POST or None)
+
+        if form.is_valid() and request.method == "POST":
+            form.save()
+            return HttpResponseRedirect(reverse('main:show_main'))
+
+        context = {'form': form}
+        return render(request, "create_product.html", context)    
+    ```
+    2. `show_xml` untuk menampilkan representasi seluruh products dalam format XML, dapat diakses pada `(url)/xml`
+    ```python
+    def show_xml(request):
+        data = Product.objects.all()
+        return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+    ```
+    3. `show_json` untuk menampilkan representasi seluruh products dalam format JSON, dapat diakses pada `(url)/json`
+    ```python
+    def show_json(request):
+        data = Product.objects.all()
+        return HttpResponse(serializers.serialize("json", data), content_type="application/json")    
+    ```
+    4. `show_xml_by_id` untuk menampilkan representasi product dengan id yang diinginkan dalam format XML, dapat diakses pada `(url)/xml/(desired_id)`
+    ```python
+    def show_xml_by_id(request, id):
+        data = Product.objects.filter(pk=id)
+        return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")    
+    ```
+    5. `show_json_by_id` untuk menampilkan representasi product dengan id yang diinginkan dalam format JSON, dapat diakses pada `(url)/json/(desired_id)`
+    ```python
+    def show_json_by_id(request, id):
+        data = Product.objects.filter(pk=id)
+        return HttpResponse(serializers.serialize("json", data), content_type="application/json")    
+    ```
+<hr>
+
+- [ ] Membuat routing URL untuk masing-masing `views` yang telah ditambahkan pada poin 2.
+    1. Isi `vending_machine/vending_machine/main/templates/urls.py` dengan:
+    ```python
+    from django.urls import path
+    from main.views import show_main, create_product, show_xml, show_json, show_xml_by_id, show_json_by_id # , show_products
+
+    app_name = 'main'
+
+    urlpatterns = [
+        path('', show_main, name='show_main'), 
+        path('create-product', create_product, name='create_product'),
+        path('xml/', show_xml, name='show_xml'), 
+        path('json/', show_json, name='show_json'),
+        path('xml/<int:id>/', show_xml_by_id, name='show_xml_by_id'),
+        path('json/<int:id>/', show_json_by_id, name='show_json_by_id'), 
+    ]
+    ```
+    `urlpatterns` digunakan agar function-function yang telah dicantumkan pada `views.py` dapat diakses dengan url yang diinginkan, untuk project ini detailnya sebagai berikut:
+    - `(url)/create-product`: Untuk user input product baru
+    - `(url)/xml`: Untuk menampilkan representasi seluruh products dalam format XML
+    - `(url)/json`: Untuk menampilkan representasi seluruh products dalam format JSON
+    - `(url)/xml/(desired_id)`: Untuk menampilkan representasi product dengan id yang diinginkan dalam format XML
+    - `(url)/xml/(desired_id)`: Untuk menampilkan representasi product dengan id yang diinginkan dalam format JSON
+<hr>
+
+### Cara Pengerjaan Bonus:
+1. Tambahkan `'total_products': products.__len__(),` pada `vending_machine/main/views.py` untuk menyimpan bannyaknya jumlah product saat ini
+2. Tambahkan `<h3>Kamu menyimpan {{total_products}} product pada aplikasi ini</h3>` pada `vending_machine/vending_machine/main/templates/main.html` karena banyaknya product saat ini disimpan pada `total_products`
+<hr>
+
+## 5. Mengakses kelima URL di poin 2 menggunakan Postman, membuat screenshot dari hasil akses URL pada Postman, dan menambahkannya ke dalam README.md
+Note: Saya sempat menghapus product ke-2 (pk="2") sehingga setelah pk="1" langsung pk="2"
+1. HTML: `(url)/create-product`: Untuk user input product baru
+![alt-text](images/tugas3_html.png)
+2. XML: `(url)/xml`: Untuk menampilkan representasi seluruh products dalam format XML
+![alt-text](images/tugas3_xml.png)
+3. JSON: `(url)/json`: Untuk menampilkan representasi seluruh products dalam format JSON
+![alt-text](images/tugas3_json.png)
+4. XML by ID: `(url)/xml/(desired_id)`: Untuk menampilkan representasi product dengan id yang diinginkan dalam format XML
+![alt-text](images/tugas3_xml_by_id.png)
+5. JSON by ID: `(url)/xml/(desired_id)`: Untuk menampilkan representasi product dengan id yang diinginkan dalam format JSON
+![alt-text](images/tugas3_json_by_id.png)
+<hr>
+
+## References
+- [Slide 4 SCeLE "Data Delivery"](https://scele.cs.ui.ac.id/mod/resource/view.php?id=150830)
+- [Tutorial 2](https://pbp-fasilkom-ui.github.io/ganjil-2024/docs/tutorial-2)
+- [Get vs. Post](https://www.javatpoint.com/get-vs-post)
+- [Handling an HTML Form – GET and POST Methods, and Data Encoding [Dev Concepts #38]](https://softuni.org/dev-concepts/handling-an-html-form/)
+- [What’s the Relationship Between XML, JSON, HTML and the Internet?](https://www.deltaxml.com/blog/xml/whats-the-relationship-between-xml-json-html-and-the-internet/#:~:text=In%20short%2C%20HTML%20is%20the,is%20really%20no%20practical%20alternative.)
+- [What are the advantages and disadvantages of using JSON vs XML?](https://www.linkedin.com/advice/0/what-advantages-disadvantages-using-json-vs-xml#:~:text=Generally%20speaking%2C%20JSON%20is%20more,but%20less%20secure%20than%20XML.)
+<hr> 
+<br>
