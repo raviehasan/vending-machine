@@ -1,7 +1,7 @@
 # Vending Machine Inventory
 #### by Ravie Hasan Abud - 2206031864 - PBP A
 #### Tugas 2: https://vending-machine.adaptable.app/main/
-#### Tugas 3: http://ravie-hasan-tutorial.pbp.cs.ui.ac.id/
+#### Tugas 3: (belum ada perintah deployment)
 <hr>
 
 # Tugas 2
@@ -335,7 +335,6 @@ Notes:
 - [Definition Model-View-ViewModel (MVVM)](https://www.techtarget.com/whatis/definition/Model-View-ViewModel)
 - [MVC Framework - Introduction](https://www.tutorialspoint.com/mvc_framework/mvc_framework_introduction.htm)
 <hr>
-<br>
 
 # Tugas 3
 
@@ -561,4 +560,3 @@ Note: Saya sempat menghapus product ke-2 (pk="2") sehingga setelah pk="1" langsu
 - [What’s the Relationship Between XML, JSON, HTML and the Internet?](https://www.deltaxml.com/blog/xml/whats-the-relationship-between-xml-json-html-and-the-internet/#:~:text=In%20short%2C%20HTML%20is%20the,is%20really%20no%20practical%20alternative.)
 - [What are the advantages and disadvantages of using JSON vs XML?](https://www.linkedin.com/advice/0/what-advantages-disadvantages-using-json-vs-xml#:~:text=Generally%20speaking%2C%20JSON%20is%20more,but%20less%20secure%20than%20XML.)
 <hr> 
-<br>
