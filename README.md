@@ -536,7 +536,7 @@ Notes:
 
 ## 5. Mengakses kelima URL di poin 2 menggunakan Postman, membuat screenshot dari hasil akses URL pada Postman, dan menambahkannya ke dalam README.md
 NOTE: Saya sempat menghapus product ke-2 (pk="2") sehingga setelah pk="1" langsung pk="2"
-1. 
+1. HTML
 - HTML: `(url)`: Untuk user melihat available products
 ![alt-text](images/tugas3_html.png)
 - HTML: `(url)/create-product`: Untuk user input product baru
