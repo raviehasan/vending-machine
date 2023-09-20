@@ -409,7 +409,6 @@ Notes:
         </body>
     </html>
     ```
-    Note: 
     - `{% something %}` dapat diisi dari file lain (seperti semacam placeholder)
     2. Membuat `forms.py` pada `vending_machine/main` dan mengisinya dengan:
     ```python
@@ -421,7 +420,6 @@ Notes:
             model = Product
             fields = ["name", "price", "amount", "description"]
     ```
-    Notes: 
     - `model = Product` menandakan bahwa isian form akan disimpan sebagai object Product
     - `fields` menandakan bahwa object Product memiliki 4 atribut yang dapat diisi melalui form (name, price, amount, description)
     3. Ubah function `show_main` pada `vending_machine/vending_machine/main/views.py` menjadi sebagai berikut:
@@ -438,7 +436,6 @@ Notes:
 
         return render(request, "main.html", context)
     ```
-    Notes:
     - `'products` akan menyimpan seluruh product yang ada pada project saat ini
     - `total_products` akan menyimpan banyak product yang ada pada project saat ini
     4. Buat `create_product.html` pada `vending_machine/mcending_machine/main/templates/` dan isi sebagai berikut:
@@ -463,7 +460,6 @@ Notes:
 
     {% endblock %}
     ```
-    Notes: 
     - `{% block content %} ... {% endblock %}` adalah konten yang akan mengisi placeholder block content pada `base.html`
     - `<form method="POST>` karena user akan memberikan beberapa input
 
@@ -539,9 +535,12 @@ Notes:
 <hr>
 
 ## 5. Mengakses kelima URL di poin 2 menggunakan Postman, membuat screenshot dari hasil akses URL pada Postman, dan menambahkannya ke dalam README.md
-Note: Saya sempat menghapus product ke-2 (pk="2") sehingga setelah pk="1" langsung pk="2"
-1. HTML: `(url)/create-product`: Untuk user input product baru
+NOTE: Saya sempat menghapus product ke-2 (pk="2") sehingga setelah pk="1" langsung pk="2"
+1. 
+- HTML: `(url)`: Untuk user melihat available products
 ![alt-text](images/tugas3_html.png)
+- HTML: `(url)/create-product`: Untuk user input product baru
+![alt-text](images/tugas3_html_create_product.png)
 2. XML: `(url)/xml`: Untuk menampilkan representasi seluruh products dalam format XML
 ![alt-text](images/tugas3_xml.png)
 3. JSON: `(url)/json`: Untuk menampilkan representasi seluruh products dalam format JSON
