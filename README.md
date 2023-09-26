@@ -646,9 +646,9 @@ Sebenarnya cookie tidak berbahaya karena cookie hanyalah sebuah data dan bersifa
     path('logout/', logout_user, name='logout'), 
     ```
     - Buat template yang akan digunakan untuk masing-masing routing dari views.py (klik untuk mengakses):
-        - [register.html](main/register.html)
-        - [main.html](main/main.html)
-        - [login.html](main/login.html)
+        - [register.html](main/templates/register.html)
+        - [main.html](main/templates/main.html)
+        - [login.html](main/templates/login.html)
 
 - [ ] Membuat dua akun pengguna dengan masing-masing tiga dummy data menggunakan model yang telah dibuat pada aplikasi sebelumnya untuk setiap akun di lokal.
     - Buka `localhost:8000` dan register untuk 3 username dengan username yang berbeda dan password
@@ -700,7 +700,7 @@ Sebenarnya cookie tidak berbahaya karena cookie hanyalah sebuah data dan bersifa
 
 ### Cara Pengerjaan Bonus:
 - Menambahkan potongan kode berikut pada `vending_machine/vending_machine/main/templates/main.html`:
-    ```python
+    ```html
     <a href="edit-amount/{{product.id}}/0">
         <button type="button" class="btn btn-success">
         +1
