@@ -18,5 +18,5 @@ class TestModels(TestCase):
 
     def test_string_method(self):
         product = Product.objects.get(id=1)
-        expected_string = f"Name: {product.name} {product.amount} {product.price} {product.date_added} {product.description}"
+        expected_string = f"{product.name} {product.amount} {product.price} {product.date_added} {product.description}"
         self.assertEqual(str(product), expected_string)

@@ -559,3 +559,204 @@ NOTE: Saya sempat menghapus product ke-2 (pk="2") sehingga setelah pk="1" langsu
 - [What’s the Relationship Between XML, JSON, HTML and the Internet?](https://www.deltaxml.com/blog/xml/whats-the-relationship-between-xml-json-html-and-the-internet/#:~:text=In%20short%2C%20HTML%20is%20the,is%20really%20no%20practical%20alternative.)
 - [What are the advantages and disadvantages of using JSON vs XML?](https://www.linkedin.com/advice/0/what-advantages-disadvantages-using-json-vs-xml#:~:text=Generally%20speaking%2C%20JSON%20is%20more,but%20less%20secure%20than%20XML.)
 <hr> 
+
+# Tugas 3
+
+## 1. Apa itu Django `UserCreationForm`, dan jelaskan apa kelebihan dan kekurangannya?
+- Merupakan form yang disediakan Django dan dapat digunakan untuk membuat (register) user baru dan user tersebut kemudian dapat login
+- By default, terdiri atas 3 fields, yaitu `username`, `passowrd1`, dan `password2`
+- Kelebihan:
+    - Telah disediakan/diimplementasikan oleh Django, sehingga kita dapat langsung menggunakannya (tidak perlu membuat from scratch), baik cukup dengan default yang disediakan maupun ingin menambahkan fields custom lain
+    - By default, telah memvalidasi input dari user, e.g. `password must be at least 8 characters`, `password can't be entirely numeric`, etc., sehingga kita tidak perlu mengimplementasikan manual
+- Kekurangan:
+    - Kurang customizable, jika perlu menambahkan kustomisasi (e.g. menambahkan fields baru) perlu mengedit beberapa file dan mengimplementasikannya secara manual
+    - Untuk fitur seperti login, logout, etc. tetap ada beberapa hal yang harus diimplementasikan secara manual (tidak disediakan oleh Django UserCreationForm)
+    - Ketentuan passwordnya agak strict sehingga dapat agak merepotkan
+
+<hr>
+
+## 2. Apa perbedaan antara autentikasi dan otorisasi dalam konteks Django, dan mengapa keduanya penting?
+- Autentikasi
+    - Merupakan mekanisme verifikasi terkait sapakah yang ingin mengakses web page, apakah user tersebut terdaftar pada sistem?
+    - Autentikasi penting karena semacam step awal dari user untuk dapat mengakses web page yang menerapkan authorization, apabila user tidak terdaftar pada sistem maka user tidak akan dapat mengakses web page tersebut. Hal ini penting untuk segi keamanan web juga untuk memastikan hanya user yang terdaftar yang dapat mengakses
+    - Contoh: Login page pada SIAK di mana user akan diminta input berupa username dan password yang kemudian akan diperiksa apakah benar ada user dengan username dan password tersebut, jika iya maka user tersebut dapat mengakses page SIAK, jika tidak maka akan diminta input ulang.
+- Otorisasi
+    - Merupakan mekanisme verifikasi apakah user yang telah terautentikasi dapat mengakses suatu web, fitur, resources, etc.
+    - Otorisasi penting karena digunakan untuk mengelola dan membatasi apa saja hal-hal yang dapat dilakukan dan tidak dapat dilakukan oleh seorang user. Hal ini penting untuk pengelolaan pengguna juga agar tidak ada user yang dapat mengakses/mengubah suatu hal yang seharusnya hanya dapat diakses oleh beberapa user
+    - Contoh: Pada Spotify terdapat regular user dan premium user, user premium memiliki akses berbeda dengan user biasa (e.g. tidak ada ads, dapat play secara shuffle maupun berurut, etc.). Maka dari itu, kita dapat menggunakan otorisasi untuk membedakan terkait resources apa saja yang dapat diakses oleh regular user dan premium user
+    - Contoh lain: Pada SIAK terdapat beberapa jenis role (e.g. Dosen, Mahasiswa, etc.) di mana role Dosen dapat memberikan dan melihat nilai banyak mahasiswa, sedangkan role Mahasiswa hanya dapat melihat nilai masing-masing (jika sudah dipublish)
+<hr>
+
+## 3. Apa itu cookies dalam konteks aplikasi web, dan bagaimana Django menggunakan cookies untuk mengelola data sesi pengguna?
+Cookies merupakan informasi/data kecil yang disimpan saat user berinteraksi dengan aplikasi web. Cookies sering digunakan untuk mengelola data sesi pengguna (dapat memanfaatkan holding state karena HTTP bersifat stateless), track preferensi user, mengumpulkan data analitis, hingga personalisasi konten untuk masing-masing pengguna. Cookies memiliki tanggal dan waktu kedaluwarsa dan akan dihapus secara otomatis ketika waktu kedaluwarsanya tiba.
+
+Contoh implementasi cookie di Django:
+- `response.set_cookie('last_login', str(datetime.datetime.now()))` dapat digunakan untuk menambahkan cookie dengan nama `last_login` yang akan menyimpan kapan user terkait terakhir kali login
+- Kemudian kita bisa menambahkan `'last_login': request.COOKIES['last_login'],` pada function di views.py untuk mengakses cookie `last_login` yang telah dibuat dan disimpan tadi
+<hr>
+
+## 4. Apakah penggunaan cookies aman secara default dalam pengembangan web, atau apakah ada risiko potensial yang harus diwaspadai?
+Sebenarnya cookie tidak berbahaya karena cookie hanyalah sebuah data dan bersifat pasif. Hanya saja, walaupun cookie bersifat pasif (hanya merupakan data dan tidak bisa mengakses data, membaca data, maupun mengganti data yang ada di sistem), penggunaan cookies dalam pengembangan web tetap memiliki sejumlah risiko potensial yang perlu diwaspadai. Perlu dicatat bahwa yang berbahaya bukan cookie, melainkan bagaimana cara cookies digunakan dalam konteks aplikasi web yang ternyata dapat disalahgunakan. Dalam penggunaan cookies, harus waspada terkait CSRF, XSS, Cookie theft, dan lain-lain. Oleh karena itu, sebaiknya tidak menyimpan data yang tergolong sensitif di cookies.
+<hr>
+
+## 5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+- [ ] Mengimplementasikan fungsi registrasi, login, dan logout untuk memungkinkan pengguna untuk mengakses aplikasi sebelumnya dengan lancar.
+    - Tambahkan kode berikut ke `vending_machine/vending_machine/main/viesw.py`
+    ```python
+        def register(request):
+            form = UserCreationForm()
+
+            if request.method == "POST":
+                form = UserCreationForm(request.POST)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, 'Your account has been successfully created!')
+                    return redirect('main:login')
+            context = {'form':form}
+            return render(request, 'register.html', context)
+
+        def login_user(request):
+            if request.method == 'POST':
+                username = request.POST.get('username')
+                password = request.POST.get('password')
+                user = authenticate(request, username=username, password=password)
+                if user is not None:
+                    login(request, user)
+                    response = HttpResponseRedirect(reverse("main:show_main")) 
+                    response.set_cookie('last_login', str(datetime.datetime.now()))
+                    return response
+                else:
+                    messages.info(request, 'Sorry, incorrect username or password. Please try again.')
+            context = {}
+            return render(request, 'login.html', context)
+
+        def logout_user(request):
+            logout(request)
+            response = HttpResponseRedirect(reverse('main:login'))
+            response.delete_cookie('last_login')
+            return response
+    ```
+    - `response.setcookie('last_login', str(datetime.datetime.now()))` digunakan untuk menyimpan waktu terakhir user yang bersangkutan login pada cookie
+    - Tambahkan `'last_login': request.COOKIES['last_login'],` pada context di views.py untuk mengakses cookie last_login
+    - Tambahkan `@login_required(login_url='/login')` di atas function show_main pada views.py untuk memastikan hanya logged in user yang bisa akses
+    - Tambahkan potongan kode berikut pada urls.py untuk handle routing:
+    ```python
+    path('register/', register, name='register'),
+    path('login/', login_user, name='login'),
+    path('logout/', logout_user, name='logout'), 
+    ```
+    - Buat template yang akan digunakan untuk masing-masing routing dari views.py (klik untuk mengakses):
+        - [register.html](main/register.html)
+        - [main.html](main/main.html)
+        - [login.html](main/login.html)
+
+- [ ] Membuat dua akun pengguna dengan masing-masing tiga dummy data menggunakan model yang telah dibuat pada aplikasi sebelumnya untuk setiap akun di lokal.
+    - Buka `localhost:8000` dan register untuk 3 username dengan username yang berbeda dan password
+    - Login ntuk ketiga user tersebut, kemudian buat 2 product/oitem baru dengan klik tombol `Add New Product` dan isi seluruh detail product yang diinginkan
+    - Setelah selesai coba cek apakah product yang ditambahkan sudah ada di tabel
+    - Apabila sudah benar, seharusnya setiap user memiliki tabel dengan isi product yang berbeda-beda
+
+- [ ] Menghubungkan model Item dengan User.
+    - Tambahkan `user = models.ForeignKey(User, on_delete=models.CASCADE)` pada class Product di models.py untuk initiate Many to One relationship (karena menggunakan ForeignKey) pada User dengan Product/Item.
+    - Ubah views.py pada bagian:
+    ```python
+    def create_product(request):
+        form = ProductForm(request.POST or None)
+
+        if form.is_valid() and request.method == "POST":
+            product = form.save(commit=False)
+            product.user = request.user
+            product.save()
+            return HttpResponseRedirect(reverse('main:show_main'))
+    ```
+    - Tambahkan `products = Product.objects.filter(user=request.user)` dan ubah context untuk key 'name'
+    ```python
+    def show_main(request):
+        products = Product.objects.filter(user=request.user)
+
+        context = {
+            'name': request.user.username,
+        ...
+        }
+    ```
+    - Lakukan migration untuk menyimpan perubahan
+
+- [ ] Menampilkan detail informasi pengguna yang sedang logged in seperti username dan menerapkan cookies seperti last login pada halaman utama aplikasi.
+    - Untuk menampilkan username dan class user dapat menggunakan potongan kode berikut pada main.html:
+    ```html
+    <p>Name: {{name}}</p> 
+    <p>Class: {{class}}</p>
+    ```
+    - Untuk menampilkan data last login user dapat memanfaatkan Cookies dengan menggunakan potongan kode berikut pada main.html:
+    ```html
+    <p>Sesi terakhir login: {{ last_login }}</p>
+    ```
+    - Untuk mengimplementasikan cookiesnya sebagai berikut:
+        - `response.set_cookie('last_login', str(datetime.datetime.now()))` pada function login_user di views.py untuk set cookie kapan user login terakhir kali
+        - `response.delete_cookie('last_login')` pada function logout_user di views.py untuk menghapus cookie
+        - `'last_login': request.COOKIES['last_login'],` pada context function show_main di views.py 
+
+<hr>
+
+### Cara Pengerjaan Bonus:
+- Menambahkan potongan kode berikut pada `vending_machine/vending_machine/main/templates/main.html`:
+    ```python
+    <a href="edit-amount/{{product.id}}/0">
+        <button type="button" class="btn btn-success">
+        +1
+        </button>
+    </a>
+    <a href="edit-amount/{{product.id}}/1">
+        <button type="button" class="btn btn-warning">
+        -1
+        </button>
+    </a>
+    <a href="edit-amount/{{product.id}}/2">
+        <button type="button" class="btn btn-danger">
+        Delete Product
+        </button>
+    </a>
+    ```
+    - Parameter yang saya gunakan adalah 0=increment, 1=decrement, dan 2=delete
+- Menambahkan potongan kode berikut ke `vending_machine/vending_machine/main/urls.py` untuk menyesuaikan href yang ada pada anchor tag di `main.html`
+    ```python
+    urlpatterns = [ 
+       ...
+       path('edit-amount/<int:id>/<int:amount_change>/', edit_amount, name='edit_amount'),
+       ... 
+    ]
+    ```
+- Menambahkan function berikut ke `views.py` pada app `main`
+    ```python
+    @login_required(login_url='login/')
+    def edit_amount(request, id, amount_change):
+        product = Product.objects.get(id=id)
+        # "+1" Button clicked --> Increment amount by 1
+        if amount_change == 0:
+            product.amount = product.amount + 1
+            product.save()
+
+        # "-1" Button clicked --> Decrement amount by 1
+        elif amount_change == 1:
+            if (product.amount > 0):
+                product.amount = product.amount - 1
+                product.save()
+            if product.amount == 0: # jika produk sudah habis = delete
+                product.delete()
+            
+        # "Delete Product" Button clicked --> Delete the product
+        else:
+            product.delete()
+
+        return HttpResponseRedirect(reverse('main:show_main'))
+    ```
+    - If amount_change=0 increment, amount_change=1 decrement, amount_change=2 delete
+
+<hr>
+
+## References
+- [Slide 5 "Form, Authentication, Session, and Cookie"](https://scele.cs.ui.ac.id/mod/resource/view.php?id=151405)
+- [Tutorial 3](https://pbp-fasilkom-ui.github.io/ganjil-2024/docs/tutorial-3)
+- [Django UserCreationForm | Creating New User](https://www.javatpoint.com/django-usercreationform)
+- [Django Cookie](https://www.javatpoint.com/django-cookie)
+<hr>

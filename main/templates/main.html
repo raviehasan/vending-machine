@@ -1,62 +1,71 @@
 {% extends 'base.html' %}
 
-{% block style %}
-    <style>
-        h1 {
-            text-align: center;
-        }
-
-        table {
-            border-collapse: collapse;
-            text-align: center;
-        }
-
-        th, td {
-            border: 1px solid black;
-            padding: 5px;
-        }
-    </style>
-{% endblock style %}
-
 {% block content %}
-    <h1>Vending Machine Inventory Page</h1>
+    <h1 class="text-center">Vending Machine Inventory Page</h1>
+    <p class="text-center">by Ravie Hasan Abud</p>
     <hr>
 
-    <h4>Name: {{name}}</h4> 
-    <h4>Class: {{class}}</h4>
-    <h4>Student ID: {{student_id}}</h4>
+    <p>Name: {{name}}</p> 
+    <p>Class: {{class}}</p>
     <hr>
 
-    <h3>Kamu menyimpan {{total_products}} product pada aplikasi ini</h3>
+    <h3 class="text-center">Kamu menyimpan {{total_products}} product(s) pada aplikasi ini</h3> 
+    <br>
 
-    <table>
+    <table class="table table-bordered text-center">
         <tr>
-            <th>Name</th>
-            <th>Amount</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Date Added</th>
+            <th scope="col">Name</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Price</th>
+            <th scope="col">Description</th>
+            <th scope="col">Date Added</th>
+            <th scope="col">Edit Amount</th>
         </tr>
     
         {% comment %} Berikut cara memperlihatkan data produk di bawah baris ini {% endcomment %}
     
         {% for product in products %}
             <tr>
-                <td>{{product.name}}</td>
+                <td scope="row">{{product.name}}</td>
                 <td>{{product.amount}}</td>
-                <td>{{product.description}}</td>
                 <td>{{product.price}}</td>
+                <td>{{product.description}}</td>
                 <td>{{product.date_added}}</td>
+                <td>
+                    <a href="edit-amount/{{product.id}}/0">
+                        <button type="button" class="btn btn-success">
+                            +1
+                        </button>
+                    </a>
+                    <a href="edit-amount/{{product.id}}/1">
+                        <button type="button" class="btn btn-warning">
+                            -1
+                        </button>
+                    </a>
+                    <a href="edit-amount/{{product.id}}/2">
+                        <button type="button" class="btn btn-danger">
+                            Delete Product
+                        </button>
+                    </a>
+                </td>
             </tr>
         {% endfor %}
     </table>
     
-    <br />
+    <br>
     
     <a href="{% url 'main:create_product' %}">
-        <button>
+        <button type="button" class="btn btn-success">
             Add New Product
         </button>
     </a>
+
+    <a href="{% url 'main:logout' %}">
+        <button type="button" class="btn btn-danger">
+            Logout
+        </button>
+    </a>
+    
+    <p>Sesi terakhir login: {{ last_login }}</p>
         
 {% endblock content %}
