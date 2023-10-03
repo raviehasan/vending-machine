@@ -560,7 +560,7 @@ NOTE: Saya sempat menghapus product ke-2 (pk="2") sehingga setelah pk="1" langsu
 - [What are the advantages and disadvantages of using JSON vs XML?](https://www.linkedin.com/advice/0/what-advantages-disadvantages-using-json-vs-xml#:~:text=Generally%20speaking%2C%20JSON%20is%20more,but%20less%20secure%20than%20XML.)
 <hr> 
 
-# Tugas 3
+# Tugas 4
 
 ## 1. Apa itu Django `UserCreationForm`, dan jelaskan apa kelebihan dan kekurangannya?
 - Merupakan form yang disediakan Django dan dapat digunakan untuk membuat (register) user baru dan user tersebut kemudian dapat login
@@ -759,4 +759,81 @@ Sebenarnya cookie tidak berbahaya karena cookie hanyalah sebuah data dan bersifa
 - [Tutorial 3](https://pbp-fasilkom-ui.github.io/ganjil-2024/docs/tutorial-3)
 - [Django UserCreationForm | Creating New User](https://www.javatpoint.com/django-usercreationform)
 - [Django Cookie](https://www.javatpoint.com/django-cookie)
+<hr>
+
+# Tugas 5
+
+## 1. Jelaskan manfaat dari setiap element selector dan kapan waktu yang tepat untuk menggunakannya.
+- Element Selector
+    - Digunakan untuk select seluruh elemen HTML dengan suatu tag tertentu
+    - Mengurangi redundancy karena dengan styling satu kali, semua elemen HTML dengan suatu tag yang sama akan berubah stylingnya secara global (misal kita styling seluruh elemen dengan tag `<p>` dengan font Times New Roman)
+    - Waktu yang tepat untuk menggunakannya adalah ketika kita ingin memastikan konsistensi suatu elemen serta menerapkan styling default untuk suatu tag tertentu (dapat dikatakan default karena masih dapat diubah dengan inline styling)
+    contoh:
+    ```html
+    element {
+        ...
+    }
+    ```
+- ID Selector
+    - Digunakan untuk select suatu elemen HTML secara unik
+    - Sesuai dengan namanya (ID), hanya akan ada satu elemen dengan id tetrtentu pada suatu web page
+    - Waktu yang tepat untuk menggunakan ID selector adalah ketika kita ingin memastikan yang akan kita styling, akses, dan lain sebagainya adalah suatu elemen yang unik dan sangat spesifik. Contohnya kita dapat memberikan id untuk suatu tombol agar ketika tombol tersebut diklik, kita dapat langsung mengakses tombol tersebut berdasarkan id unik yang telah kita berikan.
+    contoh:
+    ```html
+    #id {
+        ...
+    }
+    ```
+- Class Selector
+    - Berbeda dengan ID selector (harus unik) dan element selector (sangat general), class selector digunakan untuk mengelompokkan beberapa elemen (bisa saja berbeda jenis) sebagai satu class
+    - Pegelompokkan tersebut akan memudahkan kita untuk mengubah styling dan lain sebagainya terkait class tersebut
+    - Waktu yang tepat untuk menggunakan class selector adalah ketika kita ingin mengelompokkan beberapa elemen berbeda karena ada suatu kesamaan, dengan mengelompokkan elemen-elemen tersebut, kita hanya perlu mengedit satu kali dan akan berlaku untuk seluruh class tersebut (mengurangi redundancy serta meningkatkan efisiensi waktu)
+    ```html
+    .class {
+        ...
+    }
+    ```
+<hr>
+
+## 2. Jelaskan HTML5 Tag yang kamu ketahui.
+- `<html>` untuk menandai berkas html
+- `<head>` untuk hal-hal penting yang tidak akan ditampilkan pada web page, seperti `<meta>`, `<title>`, dll.
+- `<title>` untuk title web page yang akan ditampilkan pada tab browser
+- `<style>` untuk styling html element dengan CSS
+- `<body>` untuk menandai seluruh konten yang akan ditampilkan pada web page karena semua konten yang ada pada bagian ini akan ditampilkan kepada user
+- `<p>` untuk paragraf dan akan ignore white space
+- `<span>` untuk menandai elemen kecil HTML, biasanya digunakan untuk mempermudah proses styling elemen HTML
+- `<pre>` untuk paragraf yang pre-formatted
+- `<a>` untuk 
+- `<form>` untuk membuat formulir pada web page yang memungkinkan user untuk mengirim data ke server
+- `<ul>` dan `<ol>` untuk menampilkan berbagai hal dalam bentuk list (unordered list dan ordered list)
+- `<div>` untuk mengelompokkan dan mengatur berbagai elemen HTML untuk mempermudah proses styling dan lain sebagainya
+Note: Ada banyak tag lainnya yang belum saya explore
+<hr>
+
+## 3. Jelaskan perbedaan antara margin dan padding.
+- Margin
+    - Merupakan space antara suatu elemen (bagian luarnya) dengan elemen-elemen lain (di luar elemen itu sendiri)
+    - Digunakan untuk mengatur spacing di luar elemen (dari sisi luar elemen itu sendiri)
+    - Berpengaruh terhadap elemen-elemen lain di sekitar elemen yang bersangkutan
+- Padding
+    - Merupakan space antara batas suatu elemen dengan konten yang ada di dalam elemen itu sendiri
+    - Digunakan untuk mengatur spacing di dalam elemen (dari sisi dalam elemen itu sendiri)
+    - Hanya memengaruhi elemen itu sendiri
+<hr>
+
+## 4. Jelaskan perbedaan antara framework CSS Tailwind dan Bootstrap. Kapan sebaiknya kita menggunakan Bootstrap daripada Tailwind, dan sebaliknya?
+- Bootstrap
+    - Menyediakan berbagai komponen "siap pakai", sehingga akan meningkatkan efisiensi waktu ketika membangun web page
+    - Bootstrap tidak sefleksibel Tailwind karena memang telah menyediakan berbagai komponen jadi
+    - Menggunakan kelas CSS yang telah ditentukan di awal, sehingga kita langsung dapat menggunakannya pada elemen HTML yang ada
+    - Sebaiknya digunakan apabila memiliki keterbatasan waktu dan perlu membangun aplikasi dengan cepat dan tidak masalah dengan style yang tidak sefleksibel Tailwind untuk designnya karena telah disediakan oleb Bootstrap sendiri
+- Tailwind
+    - Menyediakan "komponen dasar", sehingga tampilannya perlu diimplementasi oleh masing-masing user
+    - Tailwind jauh lebih fleksibel untuk dicustom oleh user karena memang hanya menyediakan komponen dasar tadi
+    - Memanfaatkan kelas CSS sebagai utilitas HTML, sehingga kita akan banyak kelas untuk mengatur style dan lain sebagainya dari elemen HTML yang ada 
+    - Sebaiknya digunakan apabila ingin memiliki kendali yang lebih besar terkait design, tema, kustomisasi agar dapat menjadi lebih unik dan tidak masalah dengan menghabiskan waktu lebih lama
+<hr>
+
+## 5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
 <hr>
