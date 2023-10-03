@@ -1,19 +1,33 @@
 {% extends 'base.html' %} 
 
 {% block content %}
-<h1>Add New Product</h1>
+<div class="login">
+    <div class="container centered">
+        <div class="row d-flex justify-content-center align-items-center">
+            <div class="card shadow-2-strong" style="border-radius: 2rem;">
+                <div class="card-body p-5">
+                    <h1 class="mb-5 text-center black">Add New Product</h1>
 
-<form method="POST">
-    {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-        <tr>
-            <td></td>
-            <td>
-                <input type="submit" value="Add Product"/>
-            </td>
-        </tr>
-    </table>
-</form>
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        {% for field in form %}
+                        <p>
+                            <div style="display:table-row;" class="row">
+                                <div style="display:table-cell; vertical-align:middle; text-align:left;" class="col-sm-6 black">
+                                    {{field.label_tag}}
+                                </div>      
+                                <div style="display:table-cell; vertical-align:middle; text-align:right;" class="col-sm-6 black">
+                                    {{field}}
+                                </div>
+                            </div>
+                        </p>
+                        {% endfor %}
 
+                        <input type="submit" class="btn btn-lg btn-secondary btn-block mt-4" name="submit" value="Add Product"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

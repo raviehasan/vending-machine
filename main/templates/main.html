@@ -1,71 +1,76 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1 class="text-center">Vending Machine Inventory Page</h1>
-    <p class="text-center">by Ravie Hasan Abud</p>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand white" href="#">Vending Machine Inventory</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">      
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'main:create_product' %}">
+                    <button class="btn btn-sm btn-outline-success" type="button">
+                        Add New Product
+                    </button>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'main:logout' %}">
+                    <button class="btn btn-sm btn-outline-danger me-2" type="button">
+                        Logout
+                    </button>
+                </a>
+            </li>
+        </ul>
+        <span class="navbar-text white">
+            Last logged in session: {{ last_login }}
+        </span>
+        </div>
+    </div>   
+</nav>
+
+<div>
+    <h1 class="text-center white"><b>Vending Machine Inventory Page</b></h1>
+    <p class="text-center white"><i>{{name}}'s from {{class}} Vending Machine Inventory Page</i></p>
     <hr>
 
-    <p>Name: {{name}}</p> 
-    <p>Class: {{class}}</p>
-    <hr>
-
-    <h3 class="text-center">Kamu menyimpan {{total_products}} product(s) pada aplikasi ini</h3> 
+    <h4 class="text-center white">There are {{total_products}} available product(s):</h4>
     <br>
 
-    <table class="table table-bordered text-center">
-        <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Amount</th>
-            <th scope="col">Price</th>
-            <th scope="col">Description</th>
-            <th scope="col">Date Added</th>
-            <th scope="col">Edit Amount</th>
-        </tr>
-    
-        {% comment %} Berikut cara memperlihatkan data produk di bawah baris ini {% endcomment %}
-    
-        {% for product in products %}
-            <tr>
-                <td scope="row">{{product.name}}</td>
-                <td>{{product.amount}}</td>
-                <td>{{product.price}}</td>
-                <td>{{product.description}}</td>
-                <td>{{product.date_added}}</td>
-                <td>
-                    <a href="edit-amount/{{product.id}}/0">
-                        <button type="button" class="btn btn-success">
-                            +1
-                        </button>
-                    </a>
-                    <a href="edit-amount/{{product.id}}/1">
-                        <button type="button" class="btn btn-warning">
-                            -1
-                        </button>
-                    </a>
-                    <a href="edit-amount/{{product.id}}/2">
-                        <button type="button" class="btn btn-danger">
-                            Delete Product
-                        </button>
-                    </a>
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-    
-    <br>
-    
-    <a href="{% url 'main:create_product' %}">
-        <button type="button" class="btn btn-success">
-            Add New Product
-        </button>
-    </a>
+    {% for product in products %}
+        {% if forloop.counter == total_products %}
+            <div class="card bg-light mb-3 mx-auto" style="max-width: 18rem;">            
+                <div class="card-header text-center black"><b>{{forloop.counter}}. {{product.name}}</b></div>
+                    <div class="card-body black">
+        {% else %}
+            <div class="card bg-dark mb-3 mx-auto" style="max-width: 18rem;">            
+                <div class="card-header text-center white"><b>{{forloop.counter}}. {{product.name}}</b></div>
+                    <div class="card-body white">
+        {% endif %}
+                        <p class="card-text">Amount&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: {{product.amount}}</p>
+                        <p class="card-text">Price&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: {{product.price}}</p>
+                        <p class="card-text">Description&nbsp: {{product.description}}</p>
+                        <p class="card-text">Date added&nbsp: {{product.date_added}}</p>
+                        <a href="edit-amount/{{product.id}}/0" class="mr-2">
+                            <button type="button" class="btn btn-success">
+                                +1
+                            </button>
+                        </a>
+                        <a href="edit-amount/{{product.id}}/1">
+                            <button type="button" class="btn btn-warning">
+                                -1
+                            </button>
+                        </a>
+                        <a href="edit-amount/{{product.id}}/2" class="ml-2">
+                            <button type="button" class="btn btn-danger">
+                                Delete Product
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+    {% endfor %}
 
-    <a href="{% url 'main:logout' %}">
-        <button type="button" class="btn btn-danger">
-            Logout
-        </button>
-    </a>
-    
-    <p>Sesi terakhir login: {{ last_login }}</p>
-        
+</div>
 {% endblock content %}
