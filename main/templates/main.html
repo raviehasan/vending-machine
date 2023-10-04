@@ -41,11 +41,11 @@
     {% for product in products %}
         {% if forloop.counter == total_products %}
             <div class="card bg-light mb-3 mx-auto" style="max-width: 18rem;">            
-                <div class="card-header text-center black"><b>{{forloop.counter}}. {{product.name}}</b></div>
+                <div class="card-title text-center black"><h5><b>{{forloop.counter}}. {{product.name}}</b></h5></div>
                     <div class="card-body black">
         {% else %}
             <div class="card bg-dark mb-3 mx-auto" style="max-width: 18rem;">            
-                <div class="card-header text-center white"><b>{{forloop.counter}}. {{product.name}}</b></div>
+                <div class="card-title text-center white"><h5><b>{{forloop.counter}}. {{product.name}}</b></h5></div>
                     <div class="card-body white">
         {% endif %}
                         <p class="card-text">Amount&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: {{product.amount}}</p>
@@ -71,6 +71,5 @@
                 </div>
             </div>
     {% endfor %}
-
 </div>
 {% endblock content %}

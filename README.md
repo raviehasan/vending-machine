@@ -836,4 +836,271 @@ Note: Ada banyak tag lainnya yang belum saya explore
 <hr>
 
 ## 5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+- [ ] Kustomisasi halaman login, register, dan tambah inventori semenarik mungkin.
+    - Login page (`login.html`):
+        - Membuat suatu card di tengah web page dengan form yang telah dibuat sebelumnya
+        - Mengubah style input untuk isian username dan password dengan `form-control`
+        - Apabila ada kesalahan pada saat login, akan muncul message karena ada `{% if messages %}`
+    ```html
+    ...
+    {% block content %}
+    <div class="login">
+        <div class="container centered">
+            <div class="row d-flex justify-content-center align-items-center">
+                <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                    <div class="card shadow-2-strong" style="border-radius: 2rem;">
+                        <div class="card-body p-5">
+                            <h1 class="mb-5 text-center black">Login</h1>
+
+                            <form method="POST" action="">
+                                {% csrf_token %}
+                                    <label class="form-label black">Username:</label>
+                                    <input type="text" name="username" placeholder="Username" class="mb-4 form-control form-control-lg">
+                                    
+                                    <label class="form-label black">Password:</label>
+                                    <input type="password" name="password" placeholder="Password" class="mb-5 form-control form-control-lg">
+                                    
+                                    <input class="btn login_btn btn-lg btn-secondary btn-block mb-4" type="submit" value="Login">
+                            </form>
+
+                            {% if messages %}
+                                <ul> 
+                                    {% for message in messages %}
+                                        <li class="text-center" style="color: red;">{{ message }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+
+                            <p class="text-center black">Don't have an account yet? 
+                                <a href="{% url 'main:register' %}">Register Now</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock content %}
+    ```
+    - Register page (`register.html`):
+        - Membuat suatu card di tengah web page dengan form yang telah dibuat sebelumnya
+        - Membagi 2 card tersebut left (untuk nama field yang akan diisi) & right (untuk isian)
+        - Tidak menampilkan list syarat-syarat password dan username yang panjang agar tidak terlalu banyak text
+        - Apabila terdapat error (e.g. password confirmation tidak sesuai dengan password, maka akan ditampilkan karena ada `{% if field.errors%}`)
+    ```html
+    ...
+    {% block content %}  
+    <div class="login">
+        <div class="container centered">
+            <div class="row d-flex justify-content-center align-items-center">
+                <div class="card shadow-2-strong" style="border-radius: 2rem;">
+                    <div class="card-body p-5">
+                        <h1 class="mb-5 text-center black">Register</h1>
+
+                        <form method="POST" action="">
+                            {% csrf_token %}
+                            {% for field in form %}
+                            <p>
+                                <div style="display:table-row;" class="row">
+                                    <div style="display:table-cell; vertical-align:middle; text-align:left;" class="col-sm-6 black">
+                                        {{field.label_tag}}
+                                    </div>      
+                                    <div style="display:table-cell; vertical-align:middle; text-align:right;" class="col-sm-6 black">
+                                        {{field}}
+                                    </div>
+                                </div>
+
+                                {% if field.errors %}
+                                <ul class="errorlist">
+                                    {% for error in field.errors %}
+                                    <li style="color: red;">{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                            </p>
+                            {% endfor %}
+
+                            <input type="submit" class="btn btn-lg btn-secondary btn-block mt-4" name="submit" value="Register"/>
+                        </form>
+
+                        {% if messages %}
+                            <ul> 
+                                {% for message in messages %}
+                                    <li class="text-center" style="color: red;">{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock content %}
+    ```
+    - Add New Product page (`create_product.html`): 
+        - Membuat suatu card di tengah web page dengan form yang telah dibuat sebelumnya
+        - Membagi 2 card tersebut left (untuk nama field yang akan diisi) & right (untuk isian)
+    ```html
+    ...
+    {% block content %}
+    <div class="login">
+        <div class="container centered">
+            <div class="row d-flex justify-content-center align-items-center">
+                <div class="card shadow-2-strong" style="border-radius: 2rem;">
+                    <div class="card-body p-5">
+                        <h1 class="mb-5 text-center black">Add New Product</h1>
+
+                        <form method="POST" action="">
+                            {% csrf_token %}
+                            {% for field in form %}
+                            <p>
+                                <div style="display:table-row;" class="row">
+                                    <div style="display:table-cell; vertical-align:middle; text-align:left;" class="col-sm-6 black">
+                                        {{field.label_tag}}
+                                    </div>      
+                                    <div style="display:table-cell; vertical-align:middle; text-align:right;" class="col-sm-6 black">
+                                        {{field}}
+                                    </div>
+                                </div>
+                            </p>
+                            {% endfor %}
+
+                            <input type="submit" class="btn btn-lg btn-secondary btn-block mt-4" name="submit" value="Add Product"/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+    ```
+- [ ] Kustomisasi halaman daftar inventori menjadi lebih berwarna maupun menggunakan apporach lain seperti menggunakan Card. 
+    - Main page untuk daftar inventori (`main.html`):
+        - Membuat navbar dengan refresh, add new product button, logout button, dan last login info
+        - Untuk mengubah warna dari item terbaru saya memanfaatkan `forloop.counter`, `if`, dan `else`, yakni akan berubah warna ketika forloop.counter == product terakhir
+    ```html
+    ...
+    {% block content %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand white" href="#">Vending Machine Inventory</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav mr-auto">      
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'main:create_product' %}">
+                        <button class="btn btn-sm btn-outline-success" type="button">
+                            Add New Product
+                        </button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'main:logout' %}">
+                        <button class="btn btn-sm btn-outline-danger me-2" type="button">
+                            Logout
+                        </button>
+                    </a>
+                </li>
+            </ul>
+            <span class="navbar-text white">
+                Last logged in session: {{ last_login }}
+            </span>
+            </div>
+        </div>   
+    </nav>
+
+    <div>
+        <h1 class="text-center white"><b>Vending Machine Inventory Page</b></h1>
+        <p class="text-center white"><i>{{name}}'s from {{class}} Vending Machine Inventory Page</i></p>
+        <hr>
+
+        <h4 class="text-center white">There are {{total_products}} available product(s):</h4>
+        <br>
+
+        {% for product in products %}
+            {% if forloop.counter == total_products %}
+                <div class="card bg-light mb-3 mx-auto" style="max-width: 18rem;">            
+                    <div class="card-title text-center black"><h5><b>{{forloop.counter}}. {{product.name}}</b></h5></div>
+                        <div class="card-body black">
+            {% else %}
+                <div class="card bg-dark mb-3 mx-auto" style="max-width: 18rem;">            
+                    <div class="card-title text-center white"><h5><b>{{forloop.counter}}. {{product.name}}</b></h5></div>
+                        <div class="card-body white">
+            {% endif %}
+                            <p class="card-text">Amount&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: {{product.amount}}</p>
+                            <p class="card-text">Price&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: {{product.price}}</p>
+                            <p class="card-text">Description&nbsp: {{product.description}}</p>
+                            <p class="card-text">Date added&nbsp: {{product.date_added}}</p>
+                            <a href="edit-amount/{{product.id}}/0" class="mr-2">
+                                <button type="button" class="btn btn-success">
+                                    +1
+                                </button>
+                            </a>
+                            <a href="edit-amount/{{product.id}}/1">
+                                <button type="button" class="btn btn-warning">
+                                    -1
+                                </button>
+                            </a>
+                            <a href="edit-amount/{{product.id}}/2" class="ml-2">
+                                <button type="button" class="btn btn-danger">
+                                    Delete Product
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+        {% endfor %}
+    </div>
+    {% endblock content %}
+    ```
+    - Mengubah styling pada `base.html` menjadi:
+        - body untuk mengubah background menjadi hitam dan text menjadi putih
+        - .centered untuk align element ke tengah web page
+        - .black untuk mengubah font menjadi hitam
+        - .white untuk mengubah font menjadi putih
+    ```html
+    ...
+        <style>
+            body {
+                background-color: rgb(23, 23, 23);
+                color: rgb(230, 230, 230);
+            }
+            
+            hr {
+                background-color: rgb(230, 230, 230);
+            }        
+            
+            body > div {
+                margin: 20px;
+            }
+            
+            .centered {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+            .card-title {
+                margin: 25px 0px 0px 0px;
+            }
+
+            .card {                    
+                align-items: center;
+                border-radius: 25px;
+            }
+
+            .black {
+                color: rgb(23, 23, 23);
+            }
+
+            .white {
+                color: rgb(230, 230, 230);
+            }
+        </style>
+    ...
+    ```
+
 <hr>
