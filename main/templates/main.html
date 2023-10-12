@@ -10,20 +10,25 @@
         <ul class="navbar-nav mr-auto">      
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'main:create_product' %}">
-                    <button class="btn btn-sm btn-outline-success" type="button">
-                        Add New Product
+                    <button class="btn btn-sm btn-outline" type="button">
+                        Add Product
                     </button>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'main:logout' %}">
-                    <button class="btn btn-sm btn-outline-danger me-2" type="button">
-                        Logout
-                    </button>
-                </a>
+                <button type="button" class="btn btn-sm btn-outline mt-2 ml-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Add Product by AJAX
+                </button>
             </li>
         </ul>
-        <span class="navbar-text white">
+        <span class="nav-item d-flex justify-content-end">
+            <a class="nav-link" href="{% url 'main:logout' %}">
+                <button class="btn btn-sm btn-outline me-2" type="button">
+                    Logout
+                </button>
+            </a>
+        </span>
+        <span class="navbar-text white d-flex justify-content-end">
             Last logged in session: {{ last_login }}
         </span>
         </div>
@@ -38,38 +43,146 @@
     <h4 class="text-center white">There are {{total_products}} available product(s):</h4>
     <br>
 
-    {% for product in products %}
-        {% if forloop.counter == total_products %}
-            <div class="card bg-light mb-3 mx-auto" style="max-width: 18rem;">            
-                <div class="card-title text-center black"><h5><b>{{forloop.counter}}. {{product.name}}</b></h5></div>
-                    <div class="card-body black">
-        {% else %}
-            <div class="card bg-dark mb-3 mx-auto" style="max-width: 18rem;">            
-                <div class="card-title text-center white"><h5><b>{{forloop.counter}}. {{product.name}}</b></h5></div>
-                    <div class="card-body white">
-        {% endif %}
-                        <p class="card-text">Amount&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: {{product.amount}}</p>
-                        <p class="card-text">Price&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: {{product.price}}</p>
-                        <p class="card-text">Description&nbsp: {{product.description}}</p>
-                        <p class="card-text">Date added&nbsp: {{product.date_added}}</p>
-                        <a href="edit-amount/{{product.id}}/0" class="mr-2">
-                            <button type="button" class="btn btn-success">
-                                +1
-                            </button>
-                        </a>
-                        <a href="edit-amount/{{product.id}}/1">
-                            <button type="button" class="btn btn-warning">
-                                -1
-                            </button>
-                        </a>
-                        <a href="edit-amount/{{product.id}}/2" class="ml-2">
-                            <button type="button" class="btn btn-danger">
-                                Delete Product
-                            </button>
-                        </a>
-                    </div>
+    <div id="product_cards"></div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5 black" id="exampleModalLabel">Add New Product</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body black">
+                    <form id="form" onsubmit="return false;">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="name" class="col-form-label">Name:</label>
+                            <input type="text" class="form-control" id="name" name="name"></input>
+                        </div>
+                        <div class="mb-3">
+                            <label for="price" class="col-form-label">Price:</label>
+                            <input type="number" class="form-control" id="price" name="price"></input>
+                        </div>
+                        <div class="mb-3">
+                            <label for="amount" class="col-form-label">Amount:</label>
+                            <input type="number" class="form-control" id="amount" name="amount"></input>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="col-form-label">Description:</label>
+                            <textarea class="form-control" id="description" name="description"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="button_add_ajax" data-bs-dismiss="modal">Add Product</button>
                 </div>
             </div>
-    {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        async function getProducts() {
+            return fetch("{% url 'main:get_product_json' %}").then((res) => res.json())
+        }
+
+        async function refreshProducts() {
+            document.getElementById("product_cards").innerHTML = "";
+            const products = await getProducts()
+            let htmlString = ``
+            var counter = 1
+            var size = Object.keys(products).length;
+            products.forEach((product) => {
+                if (counter == size) {
+                    htmlString += `
+                                    <div class="card bg-light mb-3 mx-auto" style="width: 20rem; height: 19rem;">            
+                                        <div class="card-title text-center black"><h5><b>${counter}. ${product.fields.name}</b></h5></div>
+                                            <div class="card-body black">
+                                                <p class="card-text">Amount&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: ${product.fields.amount}</p>
+                                                <p class="card-text">Price&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: ${product.fields.price}</p>
+                                                <p class="card-text">Date added&nbsp: ${product.fields.date_added}</p>
+                                                <p class="card-text" style="width: 16rem;">Description&nbsp: ${product.fields.description}</p>
+                                                <div class="d-flex justify-content-center mt-3">
+                                                    <button type="button" class="btn btn-success mr-2" method="POST" onclick="incrementAJAX(${product.pk})">
+                                                        +1
+                                                    </button>                                                
+                                                    <button type="button" class="btn btn-warning" method="POST" onclick="decrementAJAX(${product.pk})">
+                                                        -1
+                                                    </button>
+                                                    <button type="button" class="btn btn-danger ml-2" method="POST" onclick="deleteAJAX(${product.pk})">
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>`
+                } else {
+                    htmlString += `
+                                    <div class="card bg-dark mb-3 mx-auto" style="width: 20rem; height: 19rem;">            
+                                        <div class="card-title text-center white"><h5><b>${counter}. ${product.fields.name}</b></h5></div>
+                                            <div class="card-body white">
+                                                <p class="card-text">Amount&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: ${product.fields.amount}</p>
+                                                <p class="card-text">Price&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: ${product.fields.price}</p>
+                                                <p class="card-text">Date added&nbsp: ${product.fields.date_added}</p>
+                                                <p class="card-text" style="width: 16rem;">Description&nbsp: ${product.fields.description}</p>
+                                                <div class="d-flex justify-content-center">
+                                                    <button type="button" class="btn btn-success mr-2" method="POST" onclick="incrementAJAX(${product.pk})">
+                                                        +1
+                                                    </button>                                                
+                                                    <button type="button" class="btn btn-warning" method="POST" onclick="decrementAJAX(${product.pk})">
+                                                        -1
+                                                    </button>
+                                                    <button type="button" class="btn btn-danger ml-2" method="POST" onclick="deleteAJAX(${product.pk})">
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>`
+                }
+                counter++;                                
+            })
+            document.getElementById("product_cards").innerHTML = htmlString
+        }
+
+        refreshProducts()
+
+        function addProduct() {
+            fetch("{% url 'main:create_ajax' %}", {
+                method: "POST",
+                body: new FormData(document.querySelector('#form'))
+            }).then(refreshProducts)
+
+            document.getElementById("form").reset()
+            return false
+        }
+
+        function incrementAJAX(pk) {
+            fetch(`increment-ajax/${pk}/`, {
+                method: "POST",
+            }).then(refreshProducts)
+
+            return false
+        }
+
+        function decrementAJAX(pk) {
+            fetch(`decrement-ajax/${pk}/`, {
+                method: "POST",
+            }).then(refreshProducts)
+
+            return false
+        }
+
+        function deleteAJAX(pk) {
+            fetch(`delete-ajax/${pk}/`, {
+                method: "POST",
+            }).then(refreshProducts)
+
+            return false
+        }
+        
+        document.getElementById("button_add_ajax").onclick = addProduct
+    </script>
+
 </div>
 {% endblock content %}

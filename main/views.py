@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Product
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from main.forms import ProductForm
 from django.urls import reverse
 from django.core import serializers
@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 import datetime
+from django.views.decorators.csrf import csrf_exempt
 
 @login_required(login_url='/login')
 def show_main(request):
@@ -45,12 +46,12 @@ def show_json(request):
     data = Product.objects.all()
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
-def show_xml_by_id(request, id):
-    data = Product.objects.filter(pk=id)
+def show_xml_by_id(request, pk):
+    data = Product.objects.filter(pk=pk)
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
 
-def show_json_by_id(request, id):
-    data = Product.objects.filter(pk=id)
+def show_json_by_id(request, pk):
+    data = Product.objects.filter(pk=pk)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 def register(request):
@@ -86,24 +87,58 @@ def logout_user(request):
     response.delete_cookie('last_login')
     return response
 
+def get_product_json(request):
+    # product_item = Product.objects.all()
+    product_item = Product.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize('json', product_item))
+
+@csrf_exempt
+def create_ajax(request):
+    if request.method == 'POST':
+        name = request.POST.get("name")
+        price = request.POST.get("price")
+        amount = request.POST.get("amount")
+        description = request.POST.get("description")
+        user = request.user
+
+        new_product = Product(name=name, price=price, amount=amount, description=description, user=user)
+        new_product.save()
+
+        return HttpResponse(b"CREATED", status=201)
+    
+    return HttpResponseNotFound()
+
 @login_required(login_url='login/')
-def edit_amount(request, id, amount_change):
-    product = Product.objects.get(id=id)
-    # "+1" Button clicked --> Increment amount by 1
-    if amount_change == 0:
-        product.amount = product.amount + 1
+@csrf_exempt
+def increment_ajax(request, pk):
+    if request.method == 'POST':
+        product = Product.objects.get(pk=pk, user=request.user)
+        product.amount += 1
         product.save()
+        return HttpResponse(b"OK", status=200)
+    
+    return HttpResponseNotFound()
 
-    # "-1" Button clicked --> Decrement amount by 1
-    elif amount_change == 1:
+@login_required(login_url='login/')
+@csrf_exempt 
+def decrement_ajax(request, pk):
+    if request.method == 'POST':
+        product = Product.objects.get(pk=pk, user=request.user)
         if (product.amount > 0):
-            product.amount = product.amount - 1
+            product.amount -= 1
             product.save()
-        if product.amount == 0: # jika produk sudah habis = delete
+        else: # jika stok produk sudah habis = delete
             product.delete()
-        
-    # "Delete Product" Button clicked --> Delete the product
-    else:
-        product.delete()
+        return HttpResponse(b"OK", status=200)
+    
+    return HttpResponseNotFound()
 
-    return HttpResponseRedirect(reverse('main:show_main'))
+@login_required(login_url='login/')
+@csrf_exempt
+def delete_ajax(request, pk):
+    if request.method == 'POST':
+        product = Product.objects.get(pk=pk, user=request.user)
+        product.delete()
+        return HttpResponse(b"OK", status=200)
+    
+    return HttpResponseNotFound()
