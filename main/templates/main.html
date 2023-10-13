@@ -97,49 +97,32 @@
                     htmlString += `
                                     <div class="card bg-light mb-3 mx-auto" style="width: 20rem; height: 19rem;">            
                                         <div class="card-title text-center black"><h5><b>${counter}. ${product.fields.name}</b></h5></div>
-                                            <div class="card-body black">
-                                                <p class="card-text">Amount&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: ${product.fields.amount}</p>
-                                                <p class="card-text">Price&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: ${product.fields.price}</p>
-                                                <p class="card-text">Date added&nbsp: ${product.fields.date_added}</p>
-                                                <p class="card-text" style="width: 16rem;">Description&nbsp: ${product.fields.description}</p>
-                                                <div class="d-flex justify-content-center mt-3">
-                                                    <button type="button" class="btn btn-success mr-2" method="POST" onclick="incrementAJAX(${product.pk})">
-                                                        +1
-                                                    </button>                                                
-                                                    <button type="button" class="btn btn-warning" method="POST" onclick="decrementAJAX(${product.pk})">
-                                                        -1
-                                                    </button>
-                                                    <button type="button" class="btn btn-danger ml-2" method="POST" onclick="deleteAJAX(${product.pk})">
-                                                        Delete
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>`
+                                            <div class="card-body black">`
                 } else {
                     htmlString += `
                                     <div class="card bg-dark mb-3 mx-auto" style="width: 20rem; height: 19rem;">            
                                         <div class="card-title text-center white"><h5><b>${counter}. ${product.fields.name}</b></h5></div>
-                                            <div class="card-body white">
-                                                <p class="card-text">Amount&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: ${product.fields.amount}</p>
-                                                <p class="card-text">Price&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: ${product.fields.price}</p>
-                                                <p class="card-text">Date added&nbsp: ${product.fields.date_added}</p>
-                                                <p class="card-text" style="width: 16rem;">Description&nbsp: ${product.fields.description}</p>
-                                                <div class="d-flex justify-content-center">
-                                                    <button type="button" class="btn btn-success mr-2" method="POST" onclick="incrementAJAX(${product.pk})">
-                                                        +1
-                                                    </button>                                                
-                                                    <button type="button" class="btn btn-warning" method="POST" onclick="decrementAJAX(${product.pk})">
-                                                        -1
-                                                    </button>
-                                                    <button type="button" class="btn btn-danger ml-2" method="POST" onclick="deleteAJAX(${product.pk})">
-                                                        Delete
-                                                    </button>
-                                                </div>
+                                            <div class="card-body white">`
+                }
+                htmlString += `
+                                            <p class="card-text">Amount&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: ${product.fields.amount}</p>
+                                            <p class="card-text">Price&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: ${product.fields.price}</p>
+                                            <p class="card-text">Date added&nbsp: ${product.fields.date_added}</p>
+                                            <p class="card-text" style="width: 16rem;">Description&nbsp: ${product.fields.description}</p>
+                                            <div class="d-flex justify-content-center">
+                                                <button type="button" class="btn btn-success mr-2" method="POST" onclick="incrementAJAX(${product.pk})">
+                                                    +1
+                                                </button>                                                
+                                                <button type="button" class="btn btn-warning" method="POST" onclick="decrementAJAX(${product.pk})">
+                                                    -1
+                                                </button>
+                                                <button type="button" class="btn btn-danger ml-2" method="POST" onclick="deleteAJAX(${product.pk})">
+                                                    Delete
+                                                </button>
                                             </div>
                                         </div>
-                                    </div>`
-                }
+                                    </div>
+                                </div>`
                 counter++;                                
             })
             document.getElementById("product_cards").innerHTML = htmlString

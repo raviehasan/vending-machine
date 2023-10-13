@@ -8,19 +8,276 @@
 # Tugas 6
 
 ## 1. Jelaskan perbedaan antara asynchronous programming dengan synchronous programming.
-
+- Synchronous:
+    - Request dijalankan secara sinkronus (berurutan)
+    - Program akan menunggu request saat ini selesai dieksekusi sebelum melanjutkan eksekusi request selanjutnya
+    - Implementasinya lebih mudah karena requestnya  idlakukan secara berurutan
+- Asynchronous:
+    - Request dijalankan secara asinkronus (paralel)
+    - Program tidak perlu menunggu request saat ini selesai dieksekusi sebelum melanjutkan eksekusi request selanjutnya, dapat dilakukan secara paralel
+    - Implementasinya lebih sulit karena dapat terjadi beberapa request secara beramaan
 <hr>
 
 ## 2. Dalam penerapan JavaScript dan AJAX, terdapat penerapan paradigma event-driven programming. Jelaskan maksud dari paradigma tersebut dan sebutkan salah satu contoh penerapannya pada tugas ini.
+- Event-driven proogramming adalah paradigma di mana aplikasi akan memberikan respon terhadap suatu event tertentu sesuai yang telah didefinsikan
+- Event-handler dapat didefinisikan sebagai function pada section script ataupun implementasi-implementasi lainnya
+- Contoh implementasi pada tugas ini adalah apabila button `+1` dilklik (terjadi event), maka function incrementAJAX akan dieksekusi, seperti berikut:
+```html
+    ....
+            <button type="button" class="btn btn-success mr-2" method="POST" onclick="incrementAJAX(${product.pk})">
+                +1
+            </button>                                                
+    ...
+    <script>
+        ...
+        function incrementAJAX(pk) {
+            fetch(`increment-ajax/${pk}/`, {
+                method: "POST",
+            }).then(refreshProducts)
+
+            return false
+        }
+        ...
+    </script>
+```
 <hr>
 
 ## 3. Jelaskan penerapan asynchronous programming pada AJAX.
+- Request dijalankan secara asinkronus (paralel)
+- Program tidak perlu menunggu request saat ini selesai dieksekusi sebelum melanjutkan eksekusi request selanjutnya, dapat dilakukan secara paralel
+- Dengan menerpakan asynchronous programming pada AJAX, user tidak harus menunggu respon dari server, sehingga browser user akan tetap responsif
+- Event-handler dapat didefinisikan sebagai function pada section script ataupun implementasi-implementasi lainnya
 <hr>
 
 ## 4. Pada PBP kali ini, penerapan AJAX dilakukan dengan menggunakan Fetch API daripada library jQuery. Bandingkanlah kedua teknologi tersebut dan tuliskan pendapat kamu teknologi manakah yang lebih baik untuk digunakan.
+- Fetch API:
+    - Menggunakan promise, sehingga syntax yang digunakan lebih mudah dipahami
+    - Memberikan tingkat fleksibilitas dan kontrol yang tinggi dengan berbagai ospi
+- jQuery:
+    - Syntax yang digunakan pada jQuery relatif singkat dan sederhana
+    - Mungkin perlu menyertakan beberapa settings tambahan jika ingin memiliki tingkat kontrol dan fleksibilitas yang lebih tinggi
+
+Menurut saya, teknologi Fetch API lebih baik untuk digunakan. Hal ini dikarenakan tingkal fleksibilitas dan ktonrol yang tinggi. Selain itu, Fetch API juga lebih modern, sehingga akan lebih compatible.
 <hr>
 
 ## 5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+- [ ] AJAX GET
+    - [ ] Ubahlah kode cards data item agar dapat mendukung AJAX GET.
+        - Menambahkan function berikut ke views.py:
+        ```python
+        def get_product_json(request):
+            product_item = Product.objects.filter(user=request.user)
+            return HttpResponse(serializers.serialize('json', product_item))
+        ```
+    - [ ] Lakukan pengambilan task menggunakan AJAX GET.
+        - Menambahkan kode berikut ke section script di main.html:
+        ```python
+        async function getProducts() {
+            return fetch("{% url 'main:get_product_json' %}").then((res) => res.json())
+        }
+        ```
+<hr>
+
+- [ ] AJAX POST
+    - [ ] Buatlah sebuah tombol yang membuka sebuah modal dengan form untuk menambahkan item.
+        - Menambahkan modal dengan form pada main.html untuk menerima input user berupa atribut dari product yang ingin ditambahkan:
+        ```html
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5 black" id="exampleModalLabel">Add New Product</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body black">
+                        <form id="form" onsubmit="return false;">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="name" class="col-form-label">Name:</label>
+                                <input type="text" class="form-control" id="name" name="name"></input>
+                            </div>
+                            <div class="mb-3">
+                                <label for="price" class="col-form-label">Price:</label>
+                                <input type="number" class="form-control" id="price" name="price"></input>
+                            </div>
+                            <div class="mb-3">
+                                <label for="amount" class="col-form-label">Amount:</label>
+                                <input type="number" class="form-control" id="amount" name="amount"></input>
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="col-form-label">Description:</label>
+                                <textarea class="form-control" id="description" name="description"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="button_add_ajax" data-bs-dismiss="modal">Add Product</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        ```
+    - [ ] Buatlah fungsi view baru untuk menambahkan item baru ke dalam basis data.
+        - Pada section script di views.py, tambahkan function berikut untuk get-product, menambahkan product baru, increment amount product, dan decrement amount product:
+        ```python
+        @csrf_exempt
+        def create_ajax(request):
+            if request.method == 'POST':
+                name = request.POST.get("name")
+                price = request.POST.get("price")
+                amount = request.POST.get("amount")
+                description = request.POST.get("description")
+                user = request.user
+
+                new_product = Product(name=name, price=price, amount=amount, description=description, user=user)
+                new_product.save()
+
+                return HttpResponse(b"CREATED", status=201)
+
+        return HttpResponseNotFound()
+
+        @login_required(login_url='login/')
+        @csrf_exempt
+        def increment_ajax(request, pk):
+            if request.method == 'POST':
+                product = Product.objects.get(pk=pk, user=request.user)
+                product.amount += 1
+                product.save()
+                return HttpResponse(b"OK", status=200)
+            
+            return HttpResponseNotFound()
+
+        @login_required(login_url='login/')
+        @csrf_exempt 
+        def decrement_ajax(request, pk):
+            if request.method == 'POST':
+                product = Product.objects.get(pk=pk, user=request.user)
+                if (product.amount > 0):
+                    product.amount -= 1
+                    product.save()
+                else: # jika stok produk sudah habis = delete
+                    product.delete()
+                return HttpResponse(b"OK", status=200)
+            
+            return HttpResponseNotFound()
+
+        @login_required(login_url='login/')
+        @csrf_exempt
+        def delete_ajax(request, pk):
+            if request.method == 'POST':
+                product = Product.objects.get(pk=pk, user=request.user)
+                product.delete()
+                return HttpResponse(b"OK", status=200)
+            
+            return HttpResponseNotFound()
+        ```
+    - [ ] Buatlah path /create-ajax/ yang mengarah ke fungsi view yang baru kamu buat.
+        - Tambahkan potongan kode berikut ke urlpatterns di urls.py untuk routing get-product, menambahkan product baru, increment amount product, dan decrement amount product
+        ```python
+        ...
+        path('get-product/', get_product_json, name='get_product_json'),
+        path('create-ajax/', create_ajax, name='create_ajax'),
+        path('increment-ajax/<int:pk>/', increment_ajax, name='increment_ajax'),
+        path('decrement-ajax/<int:pk>/', decrement_ajax, name='decrement_ajax'),
+        path('delete-ajax/<int:pk>/', delete_ajax, name='delete_ajax'),
+        ...
+        ```
+    - [ ] Hubungkan form yang telah kamu buat di dalam modal kamu ke path /create-ajax/.
+        - Menambahkan potongan kode berikut ke section script pada main.html untuk menerapkan asynchronous dan event-handler pada button add product, increment, decrement, dan delete.
+        ```html
+        ...
+        function addProduct() {
+            fetch("{% url 'main:create_ajax' %}", {
+                method: "POST",
+                body: new FormData(document.querySelector('#form'))
+            }).then(refreshProducts)
+
+            document.getElementById("form").reset()
+            return false
+        }
+
+        function incrementAJAX(pk) {
+            fetch(`increment-ajax/${pk}/`, {
+                method: "POST",
+            }).then(refreshProducts)
+
+            return false
+        }
+
+        function decrementAJAX(pk) {
+            fetch(`decrement-ajax/${pk}/`, {
+                method: "POST",
+            }).then(refreshProducts)
+
+            return false
+        }
+
+        function deleteAJAX(pk) {
+            fetch(`delete-ajax/${pk}/`, {
+                method: "POST",
+            }).then(refreshProducts)
+
+            return false
+        }
+        
+        document.getElementById("button_add_ajax").onclick = addProduct
+        ```
+    - [ ] Lakukan refresh pada halaman utama secara asinkronus untuk menampilkan daftar item terbaru tanpa reload halaman utama secara keseluruhan.
+        - Menambahkan function refreshProduct agar perubahan pada product dapat terjadi secara asynchronous
+        ```html
+        ...
+        async function refreshProducts() {
+            document.getElementById("product_cards").innerHTML = "";
+            const products = await getProducts()
+            let htmlString = ``
+            var counter = 1
+            var size = Object.keys(products).length;
+            products.forEach((product) => {
+                if (counter == size) {
+                    htmlString += `
+                                    <div class="card bg-light mb-3 mx-auto" style="width: 20rem; height: 19rem;">            
+                                        <div class="card-title text-center black"><h5><b>${counter}. ${product.fields.name}</b></h5></div>
+                                            <div class="card-body black">`
+                } else {
+                    htmlString += `
+                                    <div class="card bg-dark mb-3 mx-auto" style="width: 20rem; height: 19rem;">            
+                                        <div class="card-title text-center white"><h5><b>${counter}. ${product.fields.name}</b></h5></div>
+                                            <div class="card-body white">`
+                }
+                htmlString += `
+                                            <p class="card-text">Amount&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: ${product.fields.amount}</p>
+                                            <p class="card-text">Price&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: ${product.fields.price}</p>
+                                            <p class="card-text">Date added&nbsp: ${product.fields.date_added}</p>
+                                            <p class="card-text" style="width: 16rem;">Description&nbsp: ${product.fields.description}</p>
+                                            <div class="d-flex justify-content-center">
+                                                <button type="button" class="btn btn-success mr-2" method="POST" onclick="incrementAJAX(${product.pk})">
+                                                    +1
+                                                </button>                                                
+                                                <button type="button" class="btn btn-warning" method="POST" onclick="decrementAJAX(${product.pk})">
+                                                    -1
+                                                </button>
+                                                <button type="button" class="btn btn-danger ml-2" method="POST" onclick="deleteAJAX(${product.pk})">
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`
+                counter++;                                
+            })
+            document.getElementById("product_cards").innerHTML = htmlString
+        }
+
+        refreshProducts()
+        ...
+        ```
+<hr>
+
+- [ ] Melakukan perintah `collectstatic`
+    - Menjalankan `python manage.py collectstatic`
+    - Setelah itu, seluruh file static dari aplikasi akan terkumpul di folder static
+
 <hr>
 
 </details>
@@ -1117,9 +1374,9 @@ Notes:
     - Kurang cocok untuk palikasi berskala kecil
     - Memiliki kelebihan dalam proses binding data
 
-</details>
-
 <hr>
+
+</details>
 
 <details>
 <summary>References</summary>
