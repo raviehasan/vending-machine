@@ -18,4 +18,5 @@ urlpatterns = [
     path('increment-ajax/<int:pk>/', increment_ajax, name='increment_ajax'),
     path('decrement-ajax/<int:pk>/', decrement_ajax, name='decrement_ajax'),
     path('delete-ajax/<int:pk>/', delete_ajax, name='delete_ajax'),
+    path('create-flutter/', create_product_flutter, name='create_product_flutter'),
 ]
