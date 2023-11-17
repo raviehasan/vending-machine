@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render
 from .models import Product
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound, JsonResponse
