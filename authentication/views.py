@@ -1,8 +1,11 @@
+import json
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login as auth_login
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import logout as auth_logout
+from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
 
 @csrf_exempt
 def login(request):
@@ -28,7 +31,7 @@ def login(request):
     else:
         return JsonResponse({
             "status": False,
-            "message": "Login gagal, periksa kembali email atau kata sandi."
+            "message": "Login gagal, periksa kembali username atau password."
         }, status=401)
     
 @csrf_exempt
@@ -47,3 +50,32 @@ def logout(request):
         "status": False,
         "message": "Logout gagal."
         }, status=401)
+
+@csrf_exempt
+def register(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+
+        username = data['username']
+        password = data['password']
+        password_confirmation = data['passwordConfirmation']
+
+        # You might want to add validation and error handling here
+
+        if (password == password_confirmation):
+            user = User.objects.create(
+                username=username,
+                password=make_password(password),
+            )
+            user.save
+
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Berhasil register',
+                }, status=201)
+        
+        else:
+            return JsonResponse({
+                "status": "failed",
+                "message": "Register gagal."
+                }, status=401)     
