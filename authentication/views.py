@@ -84,4 +84,3 @@ def register(request):
                 "status": "failed",
                 "message": f"Register gagal. Sudah ada pengguna dengan username {username}."
                 }, status=401)
-        
