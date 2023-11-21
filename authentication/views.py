@@ -79,7 +79,8 @@ def register(request):
                 'status': 'success',
                 'message': 'Berhasil register',
                 }, status=201)
-        except:
+        
+        except Exception:
            return JsonResponse({
                 "status": "failed",
                 "message": f"Register gagal. Sudah ada pengguna dengan username {username}."
