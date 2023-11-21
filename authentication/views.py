@@ -62,7 +62,13 @@ def register(request):
 
         # You might want to add validation and error handling here
 
-        if (password == password_confirmation):
+        if (password != password_confirmation):
+             return JsonResponse({
+                "status": "failed",
+                "message": "Register gagal. Password tidak match."
+                }, status=401)   
+        
+        try: 
             user = User.objects.create(
                 username=username,
                 password=make_password(password),
@@ -73,9 +79,9 @@ def register(request):
                 'status': 'success',
                 'message': 'Berhasil register',
                 }, status=201)
-        
-        else:
-            return JsonResponse({
+        except:
+           return JsonResponse({
                 "status": "failed",
-                "message": "Register gagal."
-                }, status=401)     
+                "message": f"Register gagal. Sudah ada pengguna dengan username {username}."
+                }, status=401)
+        
