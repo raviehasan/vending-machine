@@ -53,44 +53,46 @@ def logout(request):
 
 @csrf_exempt
 def register(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
+    if request.method != "POST":
+        return JsonResponse({
+            "status": "failed",
+            "message": "Register gagal. Bukan method POST"
+            }, status=401)   
 
-        username = data['username']
-        password = data['password']
-        password_confirmation = data['passwordConfirmation']
-
-        # You might want to add validation and error handling here
-
-        if username == "" or password == "":
-             return JsonResponse({
-                "status": "failed",
-                "message": "Register gagal. Ada fields kosong."
-                }, status=401)
-        
-        if password != password_confirmation:
-             return JsonResponse({
-                "status": "failed",
-                "message": "Register gagal. Password tidak match."
-                }, status=401)   
-        
-        try: 
-            user = User.objects.create(
-                username = username,
-                password = make_password(password),
-            )
-            user.save
-
+    if username == "" or password == "":
             return JsonResponse({
-                'status': 'success',
-                'message': 'Berhasil register',
-                }, status=201)
-        
-        except Exception:
-           return JsonResponse({
-                "status": "failed",
-                "message": f"Register gagal. Sudah ada pengguna dengan username {username}."
-                }, status=401)
+            "status": "failed",
+            "message": "Register gagal. Ada fields kosong."
+            }, status=401)
+    
+    if password != password_confirmation:
+            return JsonResponse({
+            "status": "failed",
+            "message": "Register gagal. Password tidak match."
+            }, status=401)   
+
+    data = json.loads(request.body)
+    username = data['username']
+    password = data['password']
+    password_confirmation = data['passwordConfirmation']
+    
+    try: 
+        user = User.objects.create(
+            username = username,
+            password = make_password(password),
+        )
+        user.save
+
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Berhasil register',
+            }, status=201)
+    
+    except Exception:
+        return JsonResponse({
+            "status": "failed",
+            "message": f"Register gagal. Sudah ada pengguna dengan username {username}."
+            }, status=401)
 
 @csrf_exempt 
 def get_logged_user(request):
