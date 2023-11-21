@@ -172,3 +172,8 @@ def create_product_flutter(request):
         return JsonResponse({"status": "success"}, status=200)
     else:
         return JsonResponse({"status": "error"}, status=401)
+    
+@csrf_exempt
+def get_user_item_json(request):
+    user_data = Product.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize("json", user_data), content_type="application/json")

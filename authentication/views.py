@@ -62,7 +62,13 @@ def register(request):
 
         # You might want to add validation and error handling here
 
-        if (password != password_confirmation):
+        if username == "" or password == "":
+             return JsonResponse({
+                "status": "failed",
+                "message": "Register gagal. Ada fields kosong."
+                }, status=401)
+        
+        if password != password_confirmation:
              return JsonResponse({
                 "status": "failed",
                 "message": "Register gagal. Password tidak match."
@@ -70,8 +76,8 @@ def register(request):
         
         try: 
             user = User.objects.create(
-                username=username,
-                password=make_password(password),
+                username = username,
+                password = make_password(password),
             )
             user.save
 
@@ -85,3 +91,13 @@ def register(request):
                 "status": "failed",
                 "message": f"Register gagal. Sudah ada pengguna dengan username {username}."
                 }, status=401)
+
+@csrf_exempt 
+def get_logged_user(request):
+        user = request.user
+        return JsonResponse({
+            "user": user.username,
+            "username": user.username,
+            "status": True,
+            "message": "Logout berhasil!"
+        }, status=200)
